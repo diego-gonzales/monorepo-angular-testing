@@ -5,8 +5,6 @@ import { ValueService } from './value.service';
   providedIn: 'root',
 })
 export class MasterService {
-  // private _valueService = inject(ValueService);
-
   constructor(private _valueService: ValueService) {}
 
   getTheValue() {
