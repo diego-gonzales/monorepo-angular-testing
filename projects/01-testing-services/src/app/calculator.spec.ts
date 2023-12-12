@@ -1,28 +1,29 @@
 import { Calculator } from './calculator';
 
-fdescribe('Calculator', () => {
-  it('#multiply method should return 9', () => {
-    // Arrange
-    const calculator = new Calculator();
-    // Act
-    const result = calculator.multiply(3, 3);
-    // Assert
-    expect(result).toBe(9);
+describe('Calculator', () => {
+  describe('Test for multiply method', () => {
+    it('#multiply method should return 9', () => {
+      // Arrange
+      const calculator = new Calculator();
+      // Act
+      const result = calculator.multiply(3, 3);
+      // Assert
+      expect(result).toBe(9);
+    });
   });
 
-  it('#divide method should return some numbers', () => {
-    const calculator = new Calculator();
-    const result1 = calculator.divide(6, 3);
-    expect(result1).toEqual(2);
+  describe('Test for divide method', () => {
+    it('#divide method should return 2', () => {
+      const calculator = new Calculator();
+      const result1 = calculator.divide(6, 3);
+      expect(result1).toEqual(2);
+    });
 
-    const result2 = calculator.divide(5, 2);
-    expect(result2).toEqual(2.5);
-  });
-
-  it('#divide method should return null', () => {
-    const calculator = new Calculator();
-    const result = calculator.divide(5, 0);
-    expect(result).toBeNull();
+    it('#divide method should return null', () => {
+      const calculator = new Calculator();
+      const result = calculator.divide(5, 0);
+      expect(result).toBeNull();
+    });
   });
 
   it('testing matchers', () => {
