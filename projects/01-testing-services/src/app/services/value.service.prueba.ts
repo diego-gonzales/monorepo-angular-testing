@@ -5,11 +5,7 @@ describe('ValueService', () => {
   let service: ValueService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [ValueService],
-    });
-
-    service = TestBed.inject(ValueService);
+    service = new ValueService();
   });
 
   it('should be created', () => {
