@@ -6,7 +6,7 @@ import { ValueMockService } from './value-mock.service';
 
 fdescribe('MasterService', () => {
   it('should return "my value" from the real service', () => {
-    // IMPORTANT 👀: Normally in unit tests, if we have dependencies, they will be mocked. For example: In this case 'ValueService' is a dependency of 'MasterService', so it will be mocked. We don't care if 'getValue' method from 'ValueService' works or not; ValueService should have its own unit tests.
+    // IMPORTANT 👀: Normally in unit tests, if we have dependencies, they will be mocked. For example: In this case 'ValueService' is a dependency of 'MasterService', so it will be mocked. We don't care if 'getValue' method from 'ValueService' works or not(for that, ValueService should have its own unit tests).
     const valueService = new ValueService();
     const masterService = new MasterService(valueService);
 
@@ -44,6 +44,6 @@ fdescribe('MasterService', () => {
     // expect(masterService.getTheValue()).toBe('fake value');
     masterService.getTheValue();
     expect(valueServiceSpy.getValue).toHaveBeenCalled();
-    expect(valueServiceSpy.getValue).toHaveBeenCalledTimes(2);
+    expect(valueServiceSpy.getValue).toHaveBeenCalledTimes(1);
   });
 });
