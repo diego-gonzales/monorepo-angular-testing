@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MilligramCssComponent } from './milligram-css.component';
+import MilligramCssComponent from './milligram-css.component';
 
 describe('MilligramCssComponent', () => {
   let component: MilligramCssComponent;
@@ -8,10 +8,9 @@ describe('MilligramCssComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MilligramCssComponent]
-    })
-    .compileComponents();
-    
+      imports: [MilligramCssComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(MilligramCssComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

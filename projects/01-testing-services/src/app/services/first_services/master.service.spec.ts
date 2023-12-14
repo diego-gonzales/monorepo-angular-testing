@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { MasterService } from './master.service';
 import { ValueService } from './value.service';
 
-fdescribe('MasterService', () => {
+describe('MasterService', () => {
   let masterService: MasterService;
   let valueServiceSpy: jasmine.SpyObj<ValueService>;
 
@@ -20,7 +20,7 @@ fdescribe('MasterService', () => {
 
     masterService = TestBed.inject(MasterService);
     valueServiceSpy = TestBed.inject(
-      ValueService
+      ValueService,
     ) as jasmine.SpyObj<ValueService>;
   });
 

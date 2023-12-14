@@ -18,7 +18,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class ProductsService {
-  private _apiUrl = `${environment.API_URL}/api/v1`;
+  private _apiUrl = `${environment.API_URL}`;
 
   constructor(private http: HttpClient) {}
 
@@ -31,7 +31,7 @@ export class ProductsService {
     }
 
     return this.http.get<Product[]>(
-      `${this._apiUrl}/categories/${categoryId}/products`
+      `${this._apiUrl}/categories/${categoryId}/products`,
     );
   }
 
@@ -56,8 +56,8 @@ export class ProductsService {
               ...item,
               taxes: 0.19 * item.price,
             };
-          })
-        )
+          }),
+        ),
       );
   }
 
@@ -78,7 +78,7 @@ export class ProductsService {
           return throwError('No estas permitido');
         }
         return throwError('Ups algo salio mal');
-      })
+      }),
     );
   }
 
