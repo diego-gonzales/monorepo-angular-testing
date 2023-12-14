@@ -68,7 +68,7 @@ fdescribe('ProductsService', () => {
       httpTestingController.verify();
     });
 
-    it('should return a product list with taxes', (doneFn) => {
+    it('should return a product list where each product has a tax', (doneFn) => {
       const mockData: Product[] = [
         {
           ...generateOneProduct(),
@@ -78,17 +78,48 @@ fdescribe('ProductsService', () => {
           ...generateOneProduct(),
           price: 200, // 200 * .19 = 38
         },
+        {
+          ...generateOneProduct(),
+          price: 0, // 0 * .19 = 0 --> but I want to receive '0'
+        },
+        {
+          ...generateOneProduct(),
+          price: -100, // -100 * .19 = -19 --> but I want to receive '0'
+        },
       ];
 
       productsService.getAll().subscribe((resp) => {
         expect(resp[0].taxes).toEqual(19);
         expect(resp[1].taxes).toEqual(38);
+        expect(resp[2].taxes).toEqual(0);
+        expect(resp[3].taxes).toEqual(0);
         doneFn();
       });
 
       const requestedUrl = `${environment.API_URL}/products`;
       const req = httpTestingController.expectOne(requestedUrl);
       req.flush(mockData);
+
+      httpTestingController.verify();
+    });
+
+    it('should send query params with limit 10 and offset 3', (doneFn) => {
+      const mockData: Product[] = generateManyProducts(3);
+      const limit = 10;
+      const offset = 10;
+
+      productsService.getAll(limit, offset).subscribe(() => {
+        doneFn();
+      });
+
+      const requestedUrl = `${environment.API_URL}/products?limit=${limit}&offset=${offset}`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(mockData);
+
+      const params = req.request.params;
+
+      expect(params.get('limit')).toEqual(limit.toString());
+      expect(params.get('offset')).toEqual(offset.toString());
 
       httpTestingController.verify();
     });
