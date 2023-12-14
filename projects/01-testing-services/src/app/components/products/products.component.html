@@ -1,1 +1,25 @@
-<p>products works!</p>
+<section>
+  <h2>Products List</h2>
+  <ul class="grid">
+    @for (product of products(); track product.id; ) {
+    <li>
+      <figure>
+        <img
+          [ngSrc]="product.images[0]"
+          [alt]="product.title + 'image'"
+          width="200"
+          height="200"
+        />
+
+        <figcaption>
+          <p>{{ product.title }} - {{ product.price }}</p>
+        </figcaption>
+      </figure>
+    </li>
+    } @empty {
+    <li>
+      <p>No products found</p>
+    </li>
+    }
+  </ul>
+</section>
