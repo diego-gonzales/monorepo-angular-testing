@@ -7,6 +7,7 @@ import {
 import { ProductsService } from './products.service';
 import { Product } from '@models/products.interface';
 import { environment } from '../../environments/environment';
+import { generateManyProducts } from '../mocks/product.mock';
 
 fdescribe('ProductsService', () => {
   let productsService: ProductsService;
@@ -29,30 +30,7 @@ fdescribe('ProductsService', () => {
   describe('Tests for "getAllSimple" method', () => {
     it('should return a product list', (doneFn) => {
       // Arrange
-      const mockData: Product[] = [
-        {
-          id: '1',
-          title: 'Product 1',
-          price: 100,
-          description: 'Description 1',
-          images: [''],
-          category: {
-            id: 1,
-            name: 'Category 1',
-          },
-        },
-        {
-          id: '2',
-          title: 'Product 2',
-          price: 200,
-          description: 'Description 2',
-          images: [''],
-          category: {
-            id: 2,
-            name: 'Category 2',
-          },
-        },
-      ];
+      const mockData: Product[] = generateManyProducts(10);
 
       // Act
       productsService.getAllSimple().subscribe((resp) => {
