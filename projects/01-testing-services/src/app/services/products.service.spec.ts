@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http/testing';
 
 import { ProductsService } from './products.service';
-import { Product } from '@models/products.interface';
+import { CreateProductDTO, Product } from '@models/products.interface';
 import { environment } from '../../environments/environment';
 import {
   generateManyProducts,
@@ -24,6 +24,10 @@ fdescribe('ProductsService', () => {
 
     productsService = TestBed.inject(ProductsService);
     httpTestingController = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('should be created', () => {
@@ -46,9 +50,7 @@ fdescribe('ProductsService', () => {
       // HTTP config
       const requestedUrl = `${environment.API_URL}/products`;
       const req = httpTestingController.expectOne(requestedUrl);
-      req.flush(mockData);
-
-      httpTestingController.verify();
+      req.flush(mockData); // <-- here "mockData" is used as return value
     });
   });
 
@@ -63,9 +65,7 @@ fdescribe('ProductsService', () => {
 
       const requestedUrl = `${environment.API_URL}/products`;
       const req = httpTestingController.expectOne(requestedUrl);
-      req.flush(mockData);
-
-      httpTestingController.verify();
+      req.flush(mockData); // <-- here "mockData" is used as return value
     });
 
     it('should return a product list where each product has a tax', (doneFn) => {
@@ -98,9 +98,7 @@ fdescribe('ProductsService', () => {
 
       const requestedUrl = `${environment.API_URL}/products`;
       const req = httpTestingController.expectOne(requestedUrl);
-      req.flush(mockData);
-
-      httpTestingController.verify();
+      req.flush(mockData); // <-- here "mockData" is used as return value
     });
 
     it('should send query params with limit 10 and offset 3', (doneFn) => {
@@ -114,14 +112,37 @@ fdescribe('ProductsService', () => {
 
       const requestedUrl = `${environment.API_URL}/products?limit=${limit}&offset=${offset}`;
       const req = httpTestingController.expectOne(requestedUrl);
-      req.flush(mockData);
+      req.flush(mockData); // <-- here "mockData" is used as return value
 
       const params = req.request.params;
 
       expect(params.get('limit')).toEqual(limit.toString());
       expect(params.get('offset')).toEqual(offset.toString());
+    });
+  });
 
-      httpTestingController.verify();
+  describe('Test for "create" method', () => {
+    it('Should return a new product', (doneFn) => {
+      const mockData = generateOneProduct();
+      const newProduct: CreateProductDTO = {
+        title: 'New Product',
+        price: 100,
+        images: ['imgUrl'],
+        description: 'This is a description',
+        categoryId: 20,
+      };
+
+      productsService.create({ ...newProduct }).subscribe((resp) => {
+        expect(resp).toEqual(mockData);
+        doneFn();
+      });
+
+      const requestedUrl = `${environment.API_URL}/products`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(mockData); // <-- here "mockData" is used as return value
+
+      expect(req.request.body).toEqual(newProduct);
+      expect(req.request.method).toEqual('POST');
     });
   });
 });
