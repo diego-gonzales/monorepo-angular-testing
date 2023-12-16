@@ -5,7 +5,11 @@ import {
 } from '@angular/common/http/testing';
 
 import { ProductsService } from './products.service';
-import { CreateProductDTO, Product } from '@models/products.interface';
+import {
+  CreateProductDTO,
+  Product,
+  UpdateProductDTO,
+} from '@models/products.interface';
 import { environment } from '../../environments/environment';
 import {
   generateManyProducts,
@@ -122,7 +126,7 @@ fdescribe('ProductsService', () => {
   });
 
   describe('Test for "create" method', () => {
-    it('Should return a new product', (doneFn) => {
+    it('should create a new product', (doneFn) => {
       const mockData = generateOneProduct();
       const newProduct: CreateProductDTO = {
         title: 'New Product',
@@ -143,6 +147,50 @@ fdescribe('ProductsService', () => {
 
       expect(req.request.body).toEqual(newProduct);
       expect(req.request.method).toEqual('POST');
+    });
+  });
+
+  describe('Test for "update" method', () => {
+    it('should update a product', (doneFn) => {
+      const productId = '123';
+      const mockData = generateOneProduct();
+      const updatedProduct: UpdateProductDTO = {
+        categoryId: 4,
+        title: 'Updated product',
+        description: 'This is an updated description',
+        price: 20,
+      };
+
+      productsService
+        .update(productId, { ...updatedProduct })
+        .subscribe((resp) => {
+          expect(resp).toEqual(mockData);
+          doneFn();
+        });
+
+      const requestedUrl = `${environment.API_URL}/products/${productId}`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(mockData);
+
+      expect(req.request.body).toBe(updatedProduct);
+      expect(req.request.method).toBe('PUT');
+    });
+  });
+
+  describe('Test for "delete" method', () => {
+    it('should delete a product', (doneFn) => {
+      const productId = '123456';
+
+      productsService.delete(productId).subscribe((resp) => {
+        expect(resp).toBeTrue();
+        doneFn();
+      });
+
+      const requestUrl = `${environment.API_URL}/products/${productId}`;
+      const req = httpTestingController.expectOne(requestUrl);
+      req.flush(true);
+
+      expect(req.request.method).toEqual('DELETE');
     });
   });
 });
