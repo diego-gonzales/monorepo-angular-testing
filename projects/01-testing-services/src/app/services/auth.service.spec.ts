@@ -9,7 +9,7 @@ import { TokenService } from './token.service';
 import { Auth } from '@models/auth.interface';
 import { environment } from '../../environments/environment';
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   let authService: AuthService;
   let httpTestingController: HttpTestingController;
   let tokenService: TokenService;
@@ -57,7 +57,9 @@ fdescribe('AuthService', () => {
       };
       const email = 'test@test.com';
       const password = '123456';
-      spyOn(tokenService, 'saveToken').and.callThrough(); // con esto le indico que solo voy a espiar al método, mas no llamarlo.
+
+      // Esto es útil en las pruebas unitarias donde quieres asegurarte de que ciertos métodos se llamen de la manera esperada, pero no quieres interferir con su funcionamiento.
+      spyOn(tokenService, 'saveToken').and.callThrough();
 
       authService.login(email, password).subscribe(() => {
         expect(tokenService.saveToken).toHaveBeenCalledTimes(1);
