@@ -15,6 +15,7 @@ import {
   generateManyProducts,
   generateOneProduct,
 } from '../mocks/product.mock';
+import { HttpStatusCode } from '@angular/common/http';
 
 fdescribe('ProductsService', () => {
   let productsService: ProductsService;
@@ -172,7 +173,7 @@ fdescribe('ProductsService', () => {
       const req = httpTestingController.expectOne(requestedUrl);
       req.flush(mockData);
 
-      expect(req.request.body).toBe(updatedProduct);
+      expect(req.request.body).toEqual(updatedProduct);
       expect(req.request.method).toBe('PUT');
     });
   });
@@ -191,6 +192,87 @@ fdescribe('ProductsService', () => {
       req.flush(true);
 
       expect(req.request.method).toEqual('DELETE');
+    });
+  });
+
+  fdescribe('Test for "getOne" method', () => {
+    it('should return a product', (doneFn) => {
+      const productId = '123';
+      const mockData = generateOneProduct();
+
+      productsService.getOne(productId).subscribe((resp) => {
+        expect(resp).toEqual(mockData);
+        doneFn();
+      });
+
+      const requestedUrl = `${environment.API_URL}/products/${productId}`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(mockData);
+
+      expect(req.request.method).toBe('GET');
+    });
+
+    it('should return the right message when we have a 404 error', (doneFn) => {
+      const productId = '123';
+      const errorMsg = 'El producto no existe';
+      const serverText = 'Not found :p';
+      const mockError = {
+        status: HttpStatusCode.NotFound,
+        statusText: serverText,
+      };
+
+      productsService.getOne(productId).subscribe({
+        error: (err) => {
+          expect(err).toBe(errorMsg);
+          doneFn();
+        },
+      });
+
+      const requestedUrl = `${environment.API_URL}/products/${productId}`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(serverText, mockError);
+    });
+
+    it('should return the right message when we have a 401 error', (doneFn) => {
+      const productId = '123';
+      const errorMsg = 'No estas permitido';
+      const serverText = 'Unauthorized :p';
+      const mockError = {
+        status: 401,
+        statusText: serverText,
+      };
+
+      productsService.getOne(productId).subscribe({
+        error: (err) => {
+          expect(err).toBe(errorMsg);
+          doneFn();
+        },
+      });
+
+      const requestedUrl = `${environment.API_URL}/products/${productId}`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(serverText, mockError);
+    });
+
+    it('should return the right message when we have a different error', (doneFn) => {
+      const productId = '123';
+      const errorMsg = 'Ups algo salio mal';
+      const serverText = 'Internal Server Error :p';
+      const mockError = {
+        status: 500,
+        statusText: serverText,
+      };
+
+      productsService.getOne(productId).subscribe({
+        error: (err) => {
+          expect(err).toBe(errorMsg);
+          doneFn();
+        },
+      });
+
+      const requestedUrl = `${environment.API_URL}/products/${productId}`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      req.flush(serverText, mockError);
     });
   });
 });
