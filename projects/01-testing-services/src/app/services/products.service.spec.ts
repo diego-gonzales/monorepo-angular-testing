@@ -19,7 +19,7 @@ import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
 import { TokenInterceptor } from '@interceptors/token.interceptor';
 import { TokenService } from './token.service';
 
-fdescribe('ProductsService', () => {
+describe('ProductsService', () => {
   let productsService: ProductsService;
   let httpTestingController: HttpTestingController;
   let tokenService: TokenService; // TokenService is a dependency of TokenInterceptor
@@ -284,7 +284,7 @@ fdescribe('ProductsService', () => {
     });
   });
 
-  fdescribe('Test for Token Interceptor', () => {
+  describe('Test for Token Interceptor', () => {
     it('should working the token interceptor', (doneFn) => {
       const mockData: Product[] = generateManyProducts(10);
       const token = '1234566789';
