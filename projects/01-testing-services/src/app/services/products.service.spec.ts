@@ -15,20 +15,28 @@ import {
   generateManyProducts,
   generateOneProduct,
 } from '../mocks/product.mock';
-import { HttpStatusCode } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpStatusCode } from '@angular/common/http';
+import { TokenInterceptor } from '@interceptors/token.interceptor';
+import { TokenService } from './token.service';
 
 fdescribe('ProductsService', () => {
   let productsService: ProductsService;
   let httpTestingController: HttpTestingController;
+  let tokenService: TokenService; // TokenService is a dependency of TokenInterceptor
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ProductsService],
+      providers: [
+        ProductsService,
+        TokenService, // you can try with the real service or you can use a spy
+        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+      ],
     });
 
     productsService = TestBed.inject(ProductsService);
     httpTestingController = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
 
   afterEach(() => {
@@ -195,7 +203,7 @@ fdescribe('ProductsService', () => {
     });
   });
 
-  fdescribe('Test for "getOne" method', () => {
+  describe('Test for "getOne" method', () => {
     it('should return a product', (doneFn) => {
       const productId = '123';
       const mockData = generateOneProduct();
@@ -273,6 +281,29 @@ fdescribe('ProductsService', () => {
       const requestedUrl = `${environment.API_URL}/products/${productId}`;
       const req = httpTestingController.expectOne(requestedUrl);
       req.flush(serverText, mockError);
+    });
+  });
+
+  fdescribe('Test for Token Interceptor', () => {
+    it('should working the token interceptor', (doneFn) => {
+      const mockData: Product[] = generateManyProducts(10);
+      const token = '1234566789';
+      // 👀🥳🎉 spyOn() is another way that allows me to spy the REAL service (in this case)
+      spyOn(tokenService, 'getToken').and.returnValue(token);
+
+      productsService.getAllSimple().subscribe((resp) => {
+        expect(resp.length).toEqual(mockData.length);
+        expect(resp).toEqual(mockData);
+        doneFn();
+      });
+
+      const requestedUrl = `${environment.API_URL}/products`;
+      const req = httpTestingController.expectOne(requestedUrl);
+      const headers = req.request.headers;
+
+      expect(headers.get('Authorization')).toBe(`Bearer ${token}`);
+
+      req.flush(mockData);
     });
   });
 });
