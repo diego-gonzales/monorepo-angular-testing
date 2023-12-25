@@ -1,0 +1,16 @@
+name: CI Angular
+on: push
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and clone my repository
+        uses: actions/checkout@v2 # Checkout the repository, clone my repository on the runner
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v2 # Setup nodejs on the runner
+        with:
+          node-version: "18.x"
+      - name: Install dependencies
+        run: npm ci # Install dependencies, npm ci is better in a CI environment (recommended by npm)
+      - name: Run unit tests
+        run: ng test --no-watch --code-coverage --browsers=ChromeHeadlessCI
