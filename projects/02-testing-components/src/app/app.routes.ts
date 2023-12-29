@@ -11,7 +11,7 @@ export const routes: Routes = [
       import('@components/milligram-css/milligram-css.component'),
   },
   {
-    path: 'person',
-    loadComponent: () => import('@components/person/person.component'),
+    path: 'people',
+    loadComponent: () => import('@components/people/people.component'),
   },
 ];

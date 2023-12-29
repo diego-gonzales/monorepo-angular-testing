@@ -32,6 +32,7 @@ fdescribe('PersonComponent', () => {
     expect(paragraph?.textContent).toBe(text);
   });
 
+  // Tests for @Input() in components
   it('should render a <p> with the text content "My height is {person.height}" - with "debugElement"', () => {
     appComponent.person = new Person('Tony', 'Stark', 29, 70, 1.68);
     const text = `My height is ${appComponent.person.height}`;
@@ -65,5 +66,32 @@ fdescribe('PersonComponent', () => {
   it('should the property person name be "Diego"', () => {
     appComponent.person = new Person('Diego', 'Gonzales', 28, 56, 1.7);
     expect(appComponent.person.name).toBe('Diego');
+  });
+
+  // Tests for user events (click)
+  it('should display a text with the IMC when we execute the method "calculateIMC()"', () => {
+    appComponent.person = new Person('Black', 'Widow', 32, 76, 1.68);
+    const expectedIMC = appComponent.person.calculateIMC();
+
+    appComponent.calculateIMC(); // we can execute directly the method (instead do click)
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const h5 = compiled.querySelector('h5');
+
+    expect(h5?.textContent).toContain(expectedIMC);
+  });
+
+  it('should display a text with the IMC when a user clicks the button', () => {
+    appComponent.person = new Person('Green', 'Arrow', 28, 50, 1.7);
+    const expectedIMC = appComponent.person.calculateIMC();
+
+    const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
+    const h5 = (fixture.nativeElement as HTMLElement).querySelector('h5');
+
+    buttonDebug.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    expect(h5?.textContent).toContain(expectedIMC);
   });
 });

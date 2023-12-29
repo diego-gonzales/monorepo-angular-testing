@@ -2,3 +2,8 @@
   <h3>¡Hello {{ person.name }}!</h3>
   <p>My height is {{ person.height }}</p>
 </section>
+
+<section>
+  <button class="btn-imc" (click)="calculateIMC()">Calculate IMC</button>
+  <h5>IMC: {{ imc }}</h5>
+</section>

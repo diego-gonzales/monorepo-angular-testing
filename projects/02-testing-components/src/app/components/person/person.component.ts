@@ -11,4 +11,9 @@ import { Person } from '@models/person.model';
 })
 export default class PersonComponent {
   @Input({ required: true }) person: Person = new Person('', '', 0, 0, 0);
+  imc = '';
+
+  calculateIMC() {
+    this.imc = this.person.calculateIMC();
+  }
 }
