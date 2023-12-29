@@ -94,4 +94,21 @@ fdescribe('PersonComponent', () => {
 
     expect(h5?.textContent).toContain(expectedIMC);
   });
+
+  // Tests for @Output() in components
+  it('should emit the person correctly when click the button "Emit person"', () => {
+    const expectedPerson = new Person('Homero', 'Simpson', 40, 120, 1.6);
+    appComponent.person = expectedPerson;
+
+    let person: Person | undefined;
+    appComponent.onEmitPerson.subscribe((value) => {
+      person = value;
+    });
+
+    const buttonDebug = fixture.debugElement.query(By.css('button.btn-emit'));
+    buttonDebug.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    expect(person).toEqual(expectedPerson);
+  });
 });
