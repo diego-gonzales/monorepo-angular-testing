@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import PersonComponent from './person.component';
-import { DebugElement } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Person } from '@models/person.model';
 
-fdescribe('PersonComponent', () => {
-  let appComponent: PersonComponent;
+describe('PersonComponent', () => {
+  let personComponent: PersonComponent;
   let fixture: ComponentFixture<PersonComponent>;
 
   beforeEach(async () => {
@@ -15,16 +15,16 @@ fdescribe('PersonComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(PersonComponent);
-    appComponent = fixture.componentInstance;
+    personComponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(appComponent).toBeTruthy();
+    expect(personComponent).toBeTruthy();
   });
 
   it('should render a <p> with the text content "My height is {person.height}"', () => {
-    const text = `My height is ${appComponent.person.height}`;
+    const text = `My height is ${personComponent.person.height}`;
 
     const compiled = fixture.nativeElement as HTMLElement;
     const paragraph = compiled.querySelector('p');
@@ -34,8 +34,8 @@ fdescribe('PersonComponent', () => {
 
   // Tests for @Input() in components
   it('should render a <p> with the text content "My height is {person.height}" - with "debugElement"', () => {
-    appComponent.person = new Person('Tony', 'Stark', 29, 70, 1.68);
-    const text = `My height is ${appComponent.person.height}`;
+    personComponent.person = new Person('Tony', 'Stark', 29, 70, 1.68);
+    const text = `My height is ${personComponent.person.height}`;
 
     fixture.detectChanges();
 
@@ -45,12 +45,12 @@ fdescribe('PersonComponent', () => {
     const paragrah = compiled.querySelector('p');
 
     expect(paragrah?.textContent).toBe(text);
-    expect(paragrah?.textContent).toContain(appComponent.person.height);
+    expect(paragrah?.textContent).toContain(personComponent.person.height);
   });
 
   it('should render a <h3> with the text "¡Hello {{person.name}}!" - with debugElement and By.css', () => {
-    appComponent.person = new Person('Batman', 'Wayne', 30, 80, 1.72);
-    const text = `¡Hello ${appComponent.person.name}!`;
+    personComponent.person = new Person('Batman', 'Wayne', 30, 80, 1.72);
+    const text = `¡Hello ${personComponent.person.name}!`;
 
     // tenemos que usar el detectChanges ya que abajo estamos haciendo una prueba con el render; nuestro template tiene que reflejar esos nuevos cambios que acabamos de hacer, de lo contrario la prueba fallaría.
     fixture.detectChanges();
@@ -64,16 +64,16 @@ fdescribe('PersonComponent', () => {
   });
 
   it('should the property person name be "Diego"', () => {
-    appComponent.person = new Person('Diego', 'Gonzales', 28, 56, 1.7);
-    expect(appComponent.person.name).toBe('Diego');
+    personComponent.person = new Person('Diego', 'Gonzales', 28, 56, 1.7);
+    expect(personComponent.person.name).toBe('Diego');
   });
 
   // Tests for user events (click)
   it('should display a text with the IMC when we execute the method "calculateIMC()"', () => {
-    appComponent.person = new Person('Black', 'Widow', 32, 76, 1.68);
-    const expectedIMC = appComponent.person.calculateIMC();
+    personComponent.person = new Person('Black', 'Widow', 32, 76, 1.68);
+    const expectedIMC = personComponent.person.calculateIMC();
 
-    appComponent.calculateIMC(); // we can execute directly the method (instead do click)
+    personComponent.calculateIMC(); // we can execute directly the method (instead do click)
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -83,8 +83,8 @@ fdescribe('PersonComponent', () => {
   });
 
   it('should display a text with the IMC when a user clicks the button', () => {
-    appComponent.person = new Person('Green', 'Arrow', 28, 50, 1.7);
-    const expectedIMC = appComponent.person.calculateIMC();
+    personComponent.person = new Person('Green', 'Arrow', 28, 50, 1.7);
+    const expectedIMC = personComponent.person.calculateIMC();
 
     const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
     const h5 = (fixture.nativeElement as HTMLElement).querySelector('h5');
@@ -98,10 +98,10 @@ fdescribe('PersonComponent', () => {
   // Tests for @Output() in components
   it('should emit the person correctly when click the button "Emit person"', () => {
     const expectedPerson = new Person('Homero', 'Simpson', 40, 120, 1.6);
-    appComponent.person = expectedPerson;
+    personComponent.person = expectedPerson;
 
     let person: Person | undefined;
-    appComponent.onEmitPerson.subscribe((value) => {
+    personComponent.onEmitPerson.subscribe((value) => {
       person = value;
     });
 
@@ -110,5 +110,62 @@ fdescribe('PersonComponent', () => {
     fixture.detectChanges();
 
     expect(person).toEqual(expectedPerson);
+  });
+});
+
+// Pruebas aisladas al componente
+@Component({
+  template:
+    '<app-person [person]="person" (onEmitPerson)="onEmittedPerson($event)" />',
+})
+class HostComponent {
+  person = new Person('Bart', 'Simpson', 10, 28, 1.4);
+  emittedPerson: Person | undefined;
+
+  onEmittedPerson(person: Person) {
+    this.emittedPerson = person;
+  }
+}
+
+fdescribe('PersonComponent from HostComponent', () => {
+  let hostComponent: HostComponent;
+  let fixture: ComponentFixture<HostComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [HostComponent],
+      imports: [PersonComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(HostComponent);
+    hostComponent = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create ', () => {
+    expect(hostComponent).toBeTruthy();
+  });
+
+  it('should display the person name', () => {
+    const expectedName = hostComponent.person.name;
+    const h3Debug = fixture.debugElement.query(By.css('app-person h3'));
+    const h3 = h3Debug.nativeElement as HTMLHeadingElement;
+
+    fixture.detectChanges();
+
+    expect(h3.textContent).toContain(expectedName);
+  });
+
+  it('should emit the person correctly when click the button "Emit person"', () => {
+    const expectedPerson = hostComponent.person;
+
+    const buttonDebug = fixture.debugElement.query(
+      By.css('app-person .btn-emit'),
+    );
+
+    buttonDebug.triggerEventHandler('click');
+    fixture.detectChanges();
+
+    expect(hostComponent.emittedPerson).toEqual(expectedPerson);
   });
 });
