@@ -11,5 +11,15 @@ import { Person } from '@models/person.model';
   styleUrl: './people.component.css',
 })
 export default class PeopleComponent {
-  person = new Person('Harry', 'Potter', 18, 70, 1.65);
+  people: Person[] = [
+    new Person('Harry', 'Potter', 18, 70, 1.65),
+    new Person('Hermione', 'Granger', 18, 60, 1.65),
+    new Person('Ron', 'Weasley', 18, 70, 1.65),
+  ];
+
+  selectedPerson: Person | null = null;
+
+  onSelectedPerson(person: Person) {
+    this.selectedPerson = person;
+  }
 }

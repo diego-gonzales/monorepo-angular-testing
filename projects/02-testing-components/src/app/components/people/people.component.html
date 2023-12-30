@@ -1,3 +1,23 @@
 <div class="container">
-  <app-person [person]="person" />
+  @if (selectedPerson) {
+    <h3>Sent person: {{ selectedPerson.name }}</h3>
+  } @else {
+    <p>There is no a selected person</p>
+  }
+
+  <h4>Total People: {{ people.length }}</h4>
+
+  <ul>
+    <li>Name: {{ selectedPerson?.name }}</li>
+    <li>Lastname: {{ selectedPerson?.lastname }}</li>
+    <li>Age: {{ selectedPerson?.age }}</li>
+    <li>Weight: {{ selectedPerson?.weight }}</li>
+    <li>Height: {{ selectedPerson?.height }}</li>
+  </ul>
+
+  <hr />
+
+  @for (person of people; track $index) {
+    <app-person [person]="person" (onEmitPerson)="onSelectedPerson($event)" />
+  }
 </div>

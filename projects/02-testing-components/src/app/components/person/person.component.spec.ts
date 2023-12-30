@@ -87,10 +87,11 @@ describe('PersonComponent', () => {
     const expectedIMC = personComponent.person.calculateIMC();
 
     const buttonDebug = fixture.debugElement.query(By.css('button.btn-imc'));
-    const h5 = (fixture.nativeElement as HTMLElement).querySelector('h5');
 
     buttonDebug.triggerEventHandler('click');
     fixture.detectChanges();
+
+    const h5 = (fixture.nativeElement as HTMLElement).querySelector('h5');
 
     expect(h5?.textContent).toContain(expectedIMC);
   });
@@ -107,6 +108,7 @@ describe('PersonComponent', () => {
 
     const buttonDebug = fixture.debugElement.query(By.css('button.btn-emit'));
     buttonDebug.triggerEventHandler('click');
+
     fixture.detectChanges();
 
     expect(person).toEqual(expectedPerson);
@@ -127,7 +129,7 @@ class HostComponent {
   }
 }
 
-fdescribe('PersonComponent from HostComponent', () => {
+describe('PersonComponent from HostComponent', () => {
   let hostComponent: HostComponent;
   let fixture: ComponentFixture<HostComponent>;
 
