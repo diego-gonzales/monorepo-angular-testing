@@ -125,7 +125,7 @@ fdescribe('ProductsComponent', () => {
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
 
-      tick();
+      tick(3000); // wait 3s before resolve, because we have a setTimeout of 2s in the "error: () => {}" from the observable.
 
       expect(productsComponent.status).toBe(BTN_STATUS.ERROR);
     }));
@@ -143,7 +143,7 @@ fdescribe('ProductsComponent', () => {
 
       expect(button.textContent).toBe('Loading...');
 
-      tick();
+      tick(3000);
       fixture.detectChanges();
 
       expect(button.textContent).toBe('Ups, error!');
