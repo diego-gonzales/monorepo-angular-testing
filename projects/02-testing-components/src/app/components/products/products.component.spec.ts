@@ -196,6 +196,8 @@ fdescribe('ProductsComponent', () => {
       const paragraph = paragraphDebug.nativeElement as HTMLParagraphElement;
 
       expect(paragraph.textContent).toBe(mockValue);
+      expect(valueServiceSpy.getPromiseValue).toHaveBeenCalled();
+      expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1);
     }));
   });
 });
