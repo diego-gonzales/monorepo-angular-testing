@@ -4,6 +4,7 @@ import { ProductsService } from '@services/products.service';
 import { Product } from '@models/products.interface';
 import { ProductComponent } from '@components/product/product.component';
 import { BtnStatus } from '../../constants';
+import { ValueService } from '@services/value.service';
 
 @Component({
   selector: 'app-products',
@@ -18,7 +19,12 @@ export default class ProductsComponent {
   offset = 0;
   status: BtnStatus = 'init';
 
-  constructor(private _productsService: ProductsService) {}
+  response = '';
+
+  constructor(
+    private _productsService: ProductsService,
+    private _valueService: ValueService,
+  ) {}
 
   ngOnInit(): void {
     this.getAllProducts();
@@ -37,9 +43,15 @@ export default class ProductsComponent {
         this.status = 'success';
       },
       error: () => {
-        this.products.set([]);
-        this.status = 'error';
+        setTimeout(() => {
+          this.products.set([]);
+          this.status = 'error';
+        }, 2000);
       },
     });
+  }
+
+  async callPromise() {
+    this.response = await this._valueService.getPromiseValue();
   }
 }

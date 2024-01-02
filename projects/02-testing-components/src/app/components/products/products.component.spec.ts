@@ -12,18 +12,24 @@ import { generateManyProducts } from '@mocks/product.mock';
 import { of, defer } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { BTN_STATUS } from '../../constants';
+import { ValueService } from '@services/value.service';
 
 fdescribe('ProductsComponent', () => {
   let productsComponent: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productsServiceSpy: jasmine.SpyObj<ProductsService>;
+  let valueServiceSpy: jasmine.SpyObj<ValueService>;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('ProductsService', ['getAll']);
+    const spy_p = jasmine.createSpyObj('ProductsService', ['getAll']);
+    const spy_v = jasmine.createSpyObj('ValueService', ['getPromiseValue']);
 
     await TestBed.configureTestingModule({
       imports: [ProductsComponent, ProductComponent],
-      providers: [{ provide: ProductsService, useValue: spy }],
+      providers: [
+        { provide: ProductsService, useValue: spy_p },
+        { provide: ValueService, useValue: spy_v },
+      ],
     }).compileComponents();
   });
 
@@ -33,6 +39,9 @@ fdescribe('ProductsComponent', () => {
     productsServiceSpy = TestBed.inject(
       ProductsService,
     ) as jasmine.SpyObj<ProductsService>;
+    valueServiceSpy = TestBed.inject(
+      ValueService,
+    ) as jasmine.SpyObj<ValueService>;
 
     const productsMock = generateManyProducts(5);
     productsServiceSpy.getAll.and.returnValue(of(productsMock));
@@ -148,5 +157,21 @@ fdescribe('ProductsComponent', () => {
 
       expect(button.textContent).toBe('Ups, error!');
     }));
+  });
+
+  describe('Test for "callPromise" method', () => {
+    it("should set 'response' correctly, and also call ValueServices's getPromiseValue method", async () => {
+      const mockValue = 'my mock string';
+
+      valueServiceSpy.getPromiseValue.and.returnValue(
+        Promise.resolve(mockValue),
+      );
+
+      await productsComponent.callPromise();
+
+      expect(productsComponent.response).toBe(mockValue);
+      expect(valueServiceSpy.getPromiseValue).toHaveBeenCalled();
+      expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1);
+    });
   });
 });
