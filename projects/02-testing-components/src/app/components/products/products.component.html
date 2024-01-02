@@ -3,18 +3,7 @@
   <ul class="grid">
     @for (product of products(); track product.id) {
       <li>
-        <figure>
-          <img
-            [ngSrc]="product.images[0]"
-            [alt]="product.title + 'image'"
-            width="200"
-            height="200"
-          />
-
-          <figcaption>
-            <p>{{ product.title }} - {{ product.price }}</p>
-          </figcaption>
-        </figure>
+        <app-product [product]="product" />
       </li>
     } @empty {
       <li>

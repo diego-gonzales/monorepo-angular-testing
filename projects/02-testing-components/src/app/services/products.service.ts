@@ -11,7 +11,7 @@ import {
   UpdateProductDTO,
 } from '@models/products.interface';
 import { catchError, map, retry, zipWith } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -39,7 +39,7 @@ export class ProductsService {
     return this.http.get<Product[]>(`${this._apiUrl}/products`);
   }
 
-  getAll(limit?: number, offset?: number) {
+  getAll(limit?: number, offset?: number): Observable<Product[]> {
     let params = new HttpParams();
 
     if (limit && offset != null) {
