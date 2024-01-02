@@ -173,5 +173,29 @@ fdescribe('ProductsComponent', () => {
       expect(valueServiceSpy.getPromiseValue).toHaveBeenCalled();
       expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1);
     });
+
+    it('should render a paragraph with the promise value when the button is clicked', fakeAsync(() => {
+      const mockValue = 'my mock value';
+
+      valueServiceSpy.getPromiseValue.and.returnValue(
+        Promise.resolve(mockValue),
+      );
+
+      const buttonDebug = fixture.debugElement.query(
+        By.css('button.btn-promise'),
+      );
+
+      buttonDebug.triggerEventHandler('click');
+
+      tick();
+      fixture.detectChanges();
+
+      const paragraphDebug = fixture.debugElement.query(
+        By.css('p.promise-response'),
+      );
+      const paragraph = paragraphDebug.nativeElement as HTMLParagraphElement;
+
+      expect(paragraph.textContent).toBe(mockValue);
+    }));
   });
 });
