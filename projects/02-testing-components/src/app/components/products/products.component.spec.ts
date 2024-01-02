@@ -65,7 +65,8 @@ fdescribe('ProductsComponent', () => {
       const productsMock = generateManyProducts(10);
       productsServiceSpy.getAll.and.returnValue(of(productsMock));
 
-      productsComponent.getAllProducts();
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.products().length).toBe(
         currentTotalProducts + productsMock.length,
@@ -78,7 +79,9 @@ fdescribe('ProductsComponent', () => {
       const productsMock = generateManyProducts(3);
       productsServiceSpy.getAll.and.returnValue(of(productsMock));
 
-      productsComponent.getAllProducts();
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      buttonDebug.triggerEventHandler('click');
+
       fixture.detectChanges();
 
       const productsDebug = fixture.debugElement.queryAll(
@@ -96,7 +99,8 @@ fdescribe('ProductsComponent', () => {
         defer(() => Promise.resolve(productsMock)),
       );
 
-      productsComponent.getAllProducts();
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
 
@@ -111,10 +115,11 @@ fdescribe('ProductsComponent', () => {
         defer(() => Promise.resolve(productsMock)),
       );
 
-      productsComponent.getAllProducts();
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      buttonDebug.triggerEventHandler('click');
+
       fixture.detectChanges();
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
       const button = buttonDebug.nativeElement as HTMLButtonElement;
 
       expect(button.textContent).toBe('Loading...');
@@ -130,7 +135,8 @@ fdescribe('ProductsComponent', () => {
         defer(() => Promise.reject('Errorcito!!!')),
       );
 
-      productsComponent.getAllProducts();
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
 
@@ -144,10 +150,11 @@ fdescribe('ProductsComponent', () => {
         defer(() => Promise.reject('Errorcito!!!')),
       );
 
-      productsComponent.getAllProducts();
+      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      buttonDebug.triggerEventHandler('click');
+
       fixture.detectChanges();
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
       const button = buttonDebug.nativeElement as HTMLButtonElement;
 
       expect(button.textContent).toBe('Loading...');
