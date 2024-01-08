@@ -6,35 +6,30 @@ import { By } from '@angular/platform-browser';
 // Create a host component to test our directive
 @Component({
   template: `
-    <p class="p-first">My first value</p>
-    <p highlight>My second value</p>
+    <p>My first value</p>
+    <p class="p-first" highlight>My second value</p>
     <p highlight="yellow">My third value</p>
   `,
 })
-class HostComponent {}
+class TestComponent {}
 
 fdescribe('HighlightDirective', () => {
-  let hostComponent: HostComponent;
-  let fixture: ComponentFixture<HostComponent>;
+  let testComponent: TestComponent;
+  let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HostComponent],
+      declarations: [TestComponent],
       imports: [HighlightDirective],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HostComponent);
-    hostComponent = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestComponent);
+    testComponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  // it('should create an instance', () => {
-  //   const directive = new HighlightDirective();
-  //   expect(directive).toBeTruthy();
-  // });
-
   it('should create the hostComponent', () => {
-    expect(hostComponent).toBeTruthy();
+    expect(testComponent).toBeTruthy();
   });
 
   it('should exist 2 elements with the HighlightDirective', () => {
