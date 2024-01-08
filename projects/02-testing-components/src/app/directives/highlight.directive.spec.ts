@@ -21,7 +21,7 @@ class TestComponent {
   inputColorControl = new FormControl('blue', { nonNullable: true });
 }
 
-fdescribe('HighlightDirective', () => {
+describe('HighlightDirective', () => {
   let testComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 

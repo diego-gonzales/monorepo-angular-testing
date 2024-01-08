@@ -7,4 +7,12 @@
     [formControl]="inputColorControl"
     [highlight]="inputColorControl.value"
   />
+
+  <hr />
+
+  <h3>Pipe</h3>
+  <p>{{ "my text" | reverse }}</p>
+
+  <input type="text" [formControl]="inputTextControl" />
+  <p>{{ inputTextControl.value | reverse }}</p>
 </section>
