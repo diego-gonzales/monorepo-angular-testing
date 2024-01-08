@@ -14,7 +14,7 @@ import { By } from '@angular/platform-browser';
 import { BTN_STATUS } from '../../constants';
 import { ValueService } from '@services/value.service';
 
-fdescribe('ProductsComponent', () => {
+describe('ProductsComponent', () => {
   let productsComponent: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
   let productsServiceSpy: jasmine.SpyObj<ProductsService>;

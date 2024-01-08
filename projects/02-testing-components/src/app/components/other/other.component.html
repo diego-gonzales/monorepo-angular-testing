@@ -1,3 +1,10 @@
 <section class="container">
-  <p>others works!</p>
+  <h3>Directive</h3>
+  <p highlight>My first value</p>
+  <p highlight="yellow">My second value</p>
+  <input
+    type="color"
+    [formControl]="inputColorControl"
+    [highlight]="inputColorControl.value!"
+  />
 </section>

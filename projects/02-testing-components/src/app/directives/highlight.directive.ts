@@ -1,11 +1,19 @@
-import { Directive } from '@angular/core';
+import { Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
-  selector: '[appHighlight]',
-  standalone: true
+  selector: '[highlight]',
+  standalone: true,
 })
 export class HighlightDirective {
+  @Input('highlight') bgColor = '';
+  defaultColor = 'gray';
 
-  constructor() { }
+  constructor(private _hostElement: ElementRef<HTMLElement>) {
+    _hostElement.nativeElement.style.backgroundColor = this.defaultColor;
+  }
 
+  ngOnChanges(): void {
+    this._hostElement.nativeElement.style.backgroundColor =
+      this.bgColor || this.defaultColor;
+  }
 }
