@@ -14,4 +14,8 @@ export const routes: Routes = [
     path: 'people',
     loadComponent: () => import('@components/people/people.component'),
   },
+  {
+    path: 'other',
+    loadComponent: () => import('@components/other/other.component'),
+  },
 ];
