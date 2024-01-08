@@ -11,5 +11,5 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './other.component.css',
 })
 export default class OtherComponent {
-  inputColorControl = new FormControl('#222', { nonNullable: true });
+  inputColorControl = new FormControl('cyan', { nonNullable: true });
 }
