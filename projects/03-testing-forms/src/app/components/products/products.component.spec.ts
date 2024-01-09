@@ -9,10 +9,18 @@ import ProductsComponent from './products.component';
 import { ProductComponent } from '@components/product/product.component';
 import { ProductsService } from '@services/products.service';
 import { generateManyProducts } from '@mocks/product.mock';
-import { of, defer } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { BTN_STATUS } from '../../constants';
 import { ValueService } from '@services/value.service';
+import {
+  asyncData,
+  asyncError,
+  observableMock,
+  promiseMock,
+  queryAllElements,
+  queryElement,
+  queryElementByTestId,
+} from '../../../testing';
 
 describe('ProductsComponent', () => {
   let productsComponent: ProductsComponent;
@@ -44,7 +52,7 @@ describe('ProductsComponent', () => {
     ) as jasmine.SpyObj<ValueService>;
 
     const productsMock = generateManyProducts(5);
-    productsServiceSpy.getAll.and.returnValue(of(productsMock));
+    productsServiceSpy.getAll.and.returnValue(observableMock(productsMock));
 
     fixture.detectChanges(); // "ngOnInit()" es ejecuta en esta parte
   });
@@ -63,9 +71,9 @@ describe('ProductsComponent', () => {
       const currentTotalProducts = productsComponent.products().length;
 
       const productsMock = generateManyProducts(10);
-      productsServiceSpy.getAll.and.returnValue(of(productsMock));
+      productsServiceSpy.getAll.and.returnValue(observableMock(productsMock));
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      const buttonDebug = queryElement(fixture, 'button.btn-more');
       buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.products().length).toBe(
@@ -77,16 +85,14 @@ describe('ProductsComponent', () => {
       const currentTotalProducts = productsComponent.products().length;
 
       const productsMock = generateManyProducts(3);
-      productsServiceSpy.getAll.and.returnValue(of(productsMock));
+      productsServiceSpy.getAll.and.returnValue(observableMock(productsMock));
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      const buttonDebug = queryElement(fixture, 'button.btn-more');
       buttonDebug.triggerEventHandler('click');
 
       fixture.detectChanges();
 
-      const productsDebug = fixture.debugElement.queryAll(
-        By.css('app-product'),
-      );
+      const productsDebug = queryAllElements(fixture, 'app-product');
 
       expect(productsDebug.length).toBe(
         currentTotalProducts + productsMock.length,
@@ -95,11 +101,9 @@ describe('ProductsComponent', () => {
 
     it('should change the status property from "loading" to "success"', fakeAsync(() => {
       const productsMock = generateManyProducts(4);
-      productsServiceSpy.getAll.and.returnValue(
-        defer(() => Promise.resolve(productsMock)),
-      );
+      productsServiceSpy.getAll.and.returnValue(asyncData(productsMock));
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      const buttonDebug = queryElement(fixture, 'button.btn-more');
       buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
@@ -111,11 +115,9 @@ describe('ProductsComponent', () => {
 
     it('should render the button with the text content "Loading..."', fakeAsync(() => {
       const productsMock = generateManyProducts(2);
-      productsServiceSpy.getAll.and.returnValue(
-        defer(() => Promise.resolve(productsMock)),
-      );
+      productsServiceSpy.getAll.and.returnValue(asyncData(productsMock));
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      const buttonDebug = queryElement(fixture, 'button.btn-more');
       buttonDebug.triggerEventHandler('click');
 
       fixture.detectChanges();
@@ -131,11 +133,9 @@ describe('ProductsComponent', () => {
     }));
 
     it('should change the status property from "loading" to "error"', fakeAsync(() => {
-      productsServiceSpy.getAll.and.returnValue(
-        defer(() => Promise.reject('Errorcito!!!')),
-      );
+      productsServiceSpy.getAll.and.returnValue(asyncError('Errorcito!!!'));
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      const buttonDebug = queryElement(fixture, 'button.btn-more');
       buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
@@ -146,11 +146,9 @@ describe('ProductsComponent', () => {
     }));
 
     it('should render the button with the text content "Ups, error!"', fakeAsync(() => {
-      productsServiceSpy.getAll.and.returnValue(
-        defer(() => Promise.reject('Errorcito!!!')),
-      );
+      productsServiceSpy.getAll.and.returnValue(asyncError('Errorcito!!!'));
 
-      const buttonDebug = fixture.debugElement.query(By.css('button.btn-more'));
+      const buttonDebug = queryElement(fixture, 'button.btn-more');
       buttonDebug.triggerEventHandler('click');
 
       fixture.detectChanges();
@@ -170,9 +168,7 @@ describe('ProductsComponent', () => {
     it("should set 'response' correctly, and also call ValueServices's getPromiseValue method", async () => {
       const mockValue = 'my mock string';
 
-      valueServiceSpy.getPromiseValue.and.returnValue(
-        Promise.resolve(mockValue),
-      );
+      valueServiceSpy.getPromiseValue.and.returnValue(promiseMock(mockValue));
 
       await productsComponent.callPromise();
 
@@ -184,22 +180,16 @@ describe('ProductsComponent', () => {
     it('should render a paragraph with the promise value when the button is clicked', fakeAsync(() => {
       const mockValue = 'my mock value';
 
-      valueServiceSpy.getPromiseValue.and.returnValue(
-        Promise.resolve(mockValue),
-      );
+      valueServiceSpy.getPromiseValue.and.returnValue(promiseMock(mockValue));
 
-      const buttonDebug = fixture.debugElement.query(
-        By.css('button.btn-promise'),
-      );
+      const buttonDebug = queryElementByTestId(fixture, 'btn-promise');
 
       buttonDebug.triggerEventHandler('click');
 
       tick();
       fixture.detectChanges();
 
-      const paragraphDebug = fixture.debugElement.query(
-        By.css('p.promise-response'),
-      );
+      const paragraphDebug = queryElement(fixture, 'p.promise-response');
       const paragraph = paragraphDebug.nativeElement as HTMLParagraphElement;
 
       expect(paragraph.textContent).toBe(mockValue);
