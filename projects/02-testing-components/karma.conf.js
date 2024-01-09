@@ -32,6 +32,13 @@ module.exports = function (config) {
     },
     reporters: ["mocha"],
     browsers: ["ChromeHeadless"],
+    // configuration for Github Actions CI
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: "ChromeHeadless",
+        flags: ["--no-sandbox"],
+      },
+    },
     restartOnFileChange: true,
   });
 };
