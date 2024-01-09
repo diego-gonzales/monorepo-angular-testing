@@ -1,0 +1,18 @@
+<div>
+  <figure>
+    <img
+      [ngSrc]="product.images[0]"
+      [alt]="product.title + 'image'"
+      width="200"
+      height="200"
+    />
+
+    <figcaption>
+      <p>{{ product.title }} - {{ product.price }}</p>
+    </figcaption>
+  </figure>
+
+  <p>{{ product.description }}</p>
+
+  <button>Show details</button>
+</div>
