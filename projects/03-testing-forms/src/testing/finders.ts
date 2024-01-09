@@ -6,7 +6,15 @@ export function queryElement<T>(
   fixture: ComponentFixture<T>,
   selector: string,
 ) {
-  return fixture.debugElement.query(By.css(selector));
+  const debugElement = fixture.debugElement.query(By.css(selector));
+
+  if (!debugElement) {
+    throw new Error(
+      `Custom error: element with the "${selector}" does not exist`,
+    );
+  }
+
+  return debugElement;
 }
 
 export function queryElementByTestId<T>(

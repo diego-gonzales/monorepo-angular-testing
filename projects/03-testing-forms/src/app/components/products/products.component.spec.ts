@@ -9,7 +9,6 @@ import ProductsComponent from './products.component';
 import { ProductComponent } from '@components/product/product.component';
 import { ProductsService } from '@services/products.service';
 import { generateManyProducts } from '@mocks/product.mock';
-import { By } from '@angular/platform-browser';
 import { BTN_STATUS } from '../../constants';
 import { ValueService } from '@services/value.service';
 import {
@@ -19,7 +18,6 @@ import {
   observableMock,
   promiseMock,
   queryAllElements,
-  queryElement,
   queryElementByTestId,
 } from '../../../testing';
 
