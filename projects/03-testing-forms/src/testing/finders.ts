@@ -37,13 +37,3 @@ export function queryAllElementsByDirective<T, K>(
 ) {
   return fixture.debugElement.queryAll(By.directive(directive));
 }
-
-export function getTextContent<T>(
-  fixture: ComponentFixture<T>,
-  testId: string,
-) {
-  const debugElement = queryElementByTestId(fixture, testId);
-  const element = debugElement.nativeElement as HTMLElement;
-
-  return element.textContent;
-}
