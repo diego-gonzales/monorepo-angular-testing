@@ -13,7 +13,7 @@
   </ul>
 
   <button
-    class="btn-more"
+    data-testid="btn-more"
     (click)="getAllProducts()"
     [disabled]="status === 'loading'"
   >
@@ -32,5 +32,5 @@
   <button data-testid="btn-promise" (click)="callPromise()">
     Call promise
   </button>
-  <p class="promise-response">{{ response }}</p>
+  <p data-testid="promise-response">{{ response }}</p>
 </section>

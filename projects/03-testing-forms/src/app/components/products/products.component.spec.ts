@@ -15,6 +15,7 @@ import { ValueService } from '@services/value.service';
 import {
   asyncData,
   asyncError,
+  getTextContent,
   observableMock,
   promiseMock,
   queryAllElements,
@@ -73,7 +74,7 @@ describe('ProductsComponent', () => {
       const productsMock = generateManyProducts(10);
       productsServiceSpy.getAll.and.returnValue(observableMock(productsMock));
 
-      const buttonDebug = queryElement(fixture, 'button.btn-more');
+      const buttonDebug = queryElementByTestId(fixture, 'btn-more');
       buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.products().length).toBe(
@@ -87,7 +88,7 @@ describe('ProductsComponent', () => {
       const productsMock = generateManyProducts(3);
       productsServiceSpy.getAll.and.returnValue(observableMock(productsMock));
 
-      const buttonDebug = queryElement(fixture, 'button.btn-more');
+      const buttonDebug = queryElementByTestId(fixture, 'btn-more');
       buttonDebug.triggerEventHandler('click');
 
       fixture.detectChanges();
@@ -103,7 +104,7 @@ describe('ProductsComponent', () => {
       const productsMock = generateManyProducts(4);
       productsServiceSpy.getAll.and.returnValue(asyncData(productsMock));
 
-      const buttonDebug = queryElement(fixture, 'button.btn-more');
+      const buttonDebug = queryElementByTestId(fixture, 'btn-more');
       buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
@@ -117,25 +118,25 @@ describe('ProductsComponent', () => {
       const productsMock = generateManyProducts(2);
       productsServiceSpy.getAll.and.returnValue(asyncData(productsMock));
 
-      const buttonDebug = queryElement(fixture, 'button.btn-more');
+      const buttonDebug = queryElementByTestId(fixture, 'btn-more');
       buttonDebug.triggerEventHandler('click');
 
       fixture.detectChanges();
 
-      const button = buttonDebug.nativeElement as HTMLButtonElement;
-
-      expect(button.textContent).toBe('Loading...');
+      const buttonTextContentBefore = getTextContent(fixture, 'btn-more');
+      expect(buttonTextContentBefore).toBe('Loading...');
 
       tick();
       fixture.detectChanges();
 
-      expect(button.textContent).toBe('Load more');
+      const buttonTextContentAfter = getTextContent(fixture, 'btn-more');
+      expect(buttonTextContentAfter).toBe('Load more');
     }));
 
     it('should change the status property from "loading" to "error"', fakeAsync(() => {
       productsServiceSpy.getAll.and.returnValue(asyncError('Errorcito!!!'));
 
-      const buttonDebug = queryElement(fixture, 'button.btn-more');
+      const buttonDebug = queryElementByTestId(fixture, 'btn-more');
       buttonDebug.triggerEventHandler('click');
 
       expect(productsComponent.status).toBe(BTN_STATUS.LOADING);
@@ -148,19 +149,19 @@ describe('ProductsComponent', () => {
     it('should render the button with the text content "Ups, error!"', fakeAsync(() => {
       productsServiceSpy.getAll.and.returnValue(asyncError('Errorcito!!!'));
 
-      const buttonDebug = queryElement(fixture, 'button.btn-more');
+      const buttonDebug = queryElementByTestId(fixture, 'btn-more');
       buttonDebug.triggerEventHandler('click');
 
       fixture.detectChanges();
 
-      const button = buttonDebug.nativeElement as HTMLButtonElement;
-
-      expect(button.textContent).toBe('Loading...');
+      const buttonTextContentBefore = getTextContent(fixture, 'btn-more');
+      expect(buttonTextContentBefore).toBe('Loading...');
 
       tick(3000);
       fixture.detectChanges();
 
-      expect(button.textContent).toBe('Ups, error!');
+      const buttonTextContentAfter = getTextContent(fixture, 'btn-more');
+      expect(buttonTextContentAfter).toBe('Ups, error!');
     }));
   });
 
@@ -189,10 +190,9 @@ describe('ProductsComponent', () => {
       tick();
       fixture.detectChanges();
 
-      const paragraphDebug = queryElement(fixture, 'p.promise-response');
-      const paragraph = paragraphDebug.nativeElement as HTMLParagraphElement;
+      const paragraphTextContent = getTextContent(fixture, 'promise-response');
 
-      expect(paragraph.textContent).toBe(mockValue);
+      expect(paragraphTextContent).toBe(mockValue);
       expect(valueServiceSpy.getPromiseValue).toHaveBeenCalled();
       expect(valueServiceSpy.getPromiseValue).toHaveBeenCalledTimes(1);
     }));
