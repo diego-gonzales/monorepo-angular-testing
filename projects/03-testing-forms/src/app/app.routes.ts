@@ -10,4 +10,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('@components/product-detail/product-detail.component'),
   },
+  {
+    path: 'auth',
+    loadChildren: () => import('@routes/auth/auth.routes'),
+  },
 ];

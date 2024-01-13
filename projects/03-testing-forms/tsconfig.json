@@ -27,7 +27,8 @@
       "@pipes/*": ["./src/app/pipes/*"],
       "@models/*": ["./src/app/models/*"],
       "@interceptors/*": ["./src/app/interceptors/*"],
-      "@mocks/*": ["./src/app/mocks/*"]
+      "@mocks/*": ["./src/app/mocks/*"],
+      "@routes/*": ["./src/app/routes/*"]
     }
   },
   "angularCompilerOptions": {
