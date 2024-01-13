@@ -16,7 +16,7 @@ export const matchPasswords: ValidatorFn = (form: AbstractControl) => {
   const password = form.get('password')?.value;
   const confirmPassword = form.get('confirmPassword')?.value;
 
-  return password !== confirmPassword ? { matchPasswords: true } : null;
+  return password !== confirmPassword ? { match_password: true } : null;
 };
 
 function containsNumber(value: string) {
