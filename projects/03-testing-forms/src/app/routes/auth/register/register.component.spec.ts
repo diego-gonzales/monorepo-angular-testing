@@ -29,4 +29,50 @@ fdescribe('RegisterComponent', () => {
   it('should create', () => {
     expect(registerComponent).toBeTruthy();
   });
+
+  it('email field should be invalid', () => {
+    registerComponent.emailField?.setValue('');
+    expect(registerComponent.emailField?.invalid)
+      .withContext('empty email')
+      .toBeTruthy();
+
+    registerComponent.emailField?.setValue('test_email');
+    expect(registerComponent.emailField?.invalid)
+      .withContext('wrong email')
+      .toBeTruthy();
+  });
+
+  it('password field should be invalid', () => {
+    registerComponent.passwordField?.setValue('');
+    expect(registerComponent.passwordField?.invalid)
+      .withContext('empty password')
+      .toBeTruthy();
+
+    registerComponent.passwordField?.setValue('12345');
+    expect(registerComponent.passwordField?.invalid)
+      .withContext('short password')
+      .toBeTruthy();
+
+    registerComponent.passwordField?.setValue('asasasasasasa');
+    expect(registerComponent.passwordField?.invalid)
+      .withContext('no number')
+      .toBeTruthy();
+
+    registerComponent.passwordField?.setValue('Mypass123');
+    expect(registerComponent.passwordField?.valid)
+      .withContext('correct password')
+      .toBeTruthy();
+  });
+
+  it('the form should be invalid', () => {
+    registerComponent.form.patchValue({
+      name: 'test',
+      email: 'test@email.com',
+      password: '123456',
+      confirmPassword: '123456',
+      checkTerms: false,
+    });
+
+    expect(registerComponent.form.valid).toBeFalsy();
+  });
 });
