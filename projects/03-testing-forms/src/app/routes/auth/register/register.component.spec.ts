@@ -111,5 +111,17 @@ fdescribe('RegisterComponent', () => {
 
       expect(passwordErrorTextContent).toContain('Required');
     });
+
+    it('checkTerms field should be valid', () => {
+      const inputDebug = queryElement(fixture, 'input#terms');
+      const input = inputDebug.nativeElement as HTMLInputElement;
+
+      input.checked = true;
+      input.dispatchEvent(new Event('change'));
+
+      fixture.detectChanges();
+
+      expect(registerComponent.checkTermsField?.valid).toBeTruthy();
+    });
   });
 });
