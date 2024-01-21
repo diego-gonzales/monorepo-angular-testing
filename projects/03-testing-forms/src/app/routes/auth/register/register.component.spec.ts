@@ -2,7 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import RegisterComponent from './register.component';
 import { UsersService } from '@services/users.service';
-import { getTextContent, queryElement, fillInput } from '../../../../testing';
+import {
+  getTextContent,
+  queryElement,
+  fillInput,
+  observableMock,
+} from '../../../../testing';
+import { User } from '@models/user.interface';
+import { generateOneUser } from '@mocks/user.mock';
 
 fdescribe('RegisterComponent', () => {
   let registerComponent: RegisterComponent;
@@ -123,5 +130,24 @@ fdescribe('RegisterComponent', () => {
 
       expect(registerComponent.checkTermsField?.valid).toBeTruthy();
     });
+  });
+
+  it('the form submit should call the service (from logic)', () => {
+    registerComponent.form.patchValue({
+      name: 'test',
+      email: 'test@email.com',
+      password: '123456',
+      confirmPassword: '123456',
+      checkTerms: true,
+    });
+
+    const mockUser = generateOneUser();
+
+    usersServiceSpy.create.and.returnValue(observableMock(mockUser));
+
+    registerComponent.register();
+
+    expect(usersServiceSpy.create).toHaveBeenCalled();
+    expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
   });
 });
