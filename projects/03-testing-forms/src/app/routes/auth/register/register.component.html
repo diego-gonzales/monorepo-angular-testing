@@ -61,11 +61,19 @@
           "
         />
         <ng-container *ngIf="passwordField?.touched && passwordField?.errors">
-          <small *ngIf="passwordField?.hasError('required')">*Required</small>
-          <small *ngIf="passwordField?.hasError('minlength')"
+          <small
+            *ngIf="passwordField?.hasError('required')"
+            data-testid="pass-required-error"
+            >*Required</small
+          >
+          <small
+            *ngIf="passwordField?.hasError('minlength')"
+            data-testid="pass-greater-error"
             >*Should be greater 6</small
           >
-          <small *ngIf="passwordField?.hasError('invalid_password')"
+          <small
+            *ngIf="passwordField?.hasError('invalid_password')"
+            data-testid="pass-no-number-error"
             >*Should contain numbers</small
           >
         </ng-container>

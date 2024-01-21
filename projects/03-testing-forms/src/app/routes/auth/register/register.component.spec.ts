@@ -2,12 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import RegisterComponent from './register.component';
 import { UsersService } from '@services/users.service';
-import { NonNullableFormBuilder } from '@angular/forms';
-import {
-  getTextContent,
-  queryElement,
-  queryElementByTestId,
-} from '../../../../testing';
+import { getTextContent, queryElement, fillInput } from '../../../../testing';
 
 fdescribe('RegisterComponent', () => {
   let registerComponent: RegisterComponent;
@@ -102,6 +97,19 @@ fdescribe('RegisterComponent', () => {
       );
 
       expect(emailErrorTextContent).toContain("It's not a email");
+    });
+
+    it('password field should be invalid', () => {
+      fillInput(fixture, 'input#password', '');
+
+      fixture.detectChanges();
+
+      const passwordErrorTextContent = getTextContent(
+        fixture,
+        'pass-required-error',
+      );
+
+      expect(passwordErrorTextContent).toContain('Required');
     });
   });
 });
