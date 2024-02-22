@@ -13,6 +13,8 @@ import {
   fillInput,
   observableMock,
   asyncData,
+  checkInput,
+  triggerClickElement,
 } from '../../../../testing';
 import { User } from '@models/user.interface';
 import { generateOneUser } from '@mocks/user.mock';
@@ -138,44 +140,76 @@ fdescribe('RegisterComponent', () => {
     });
   });
 
-  it('the form submit should call the service (from logic)', () => {
-    registerComponent.form.patchValue({
-      name: 'test',
-      email: 'test@email.com',
-      password: '123456',
-      confirmPassword: '123456',
-      checkTerms: true,
+  describe('Test submit entire form from Logic', () => {
+    it('the form submit should call the service', () => {
+      registerComponent.form.patchValue({
+        name: 'test',
+        email: 'test@email.com',
+        password: '123456',
+        confirmPassword: '123456',
+        checkTerms: true,
+      });
+
+      const mockUser = generateOneUser();
+
+      usersServiceSpy.create.and.returnValue(observableMock(mockUser));
+
+      registerComponent.register();
+
+      expect(usersServiceSpy.create).toHaveBeenCalled();
+      expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
     });
 
-    const mockUser = generateOneUser();
+    it('should change the "status" variable from "loading" to "success"', fakeAsync(() => {
+      registerComponent.form.patchValue({
+        name: 'test',
+        email: 'test@email.com',
+        password: '123456',
+        confirmPassword: '123456',
+        checkTerms: true,
+      });
 
-    usersServiceSpy.create.and.returnValue(observableMock(mockUser));
+      const mockUser = generateOneUser();
 
-    registerComponent.register();
+      usersServiceSpy.create.and.returnValue(asyncData(mockUser));
 
-    expect(usersServiceSpy.create).toHaveBeenCalled();
-    expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
+      registerComponent.register();
+
+      expect(registerComponent.status).toBe('loading');
+
+      tick(); // this function finish all the async operations
+
+      expect(registerComponent.status).toBe('success');
+    }));
   });
 
-  it('should change the "status" variable from "loading" to "success"', fakeAsync(() => {
-    registerComponent.form.patchValue({
-      name: 'test',
-      email: 'test@email.com',
-      password: '123456',
-      confirmPassword: '123456',
-      checkTerms: true,
+  describe('Test submit entire form from UI', () => {
+    it('the form submit should call the service and change the "status" variable from "loading" to "success"', () => {
+      const mockData = generateOneUser();
+
+      fillInput(fixture, 'input#name', 'test');
+      fillInput(fixture, 'input#email', 'test@email.com');
+      fillInput(fixture, 'input#password', '123456');
+      fillInput(fixture, 'input#confirmPassword', '123456');
+      checkInput(fixture, 'input#terms', true);
+
+      const debugForm = queryElement(fixture, 'form');
+
+      // 1st way
+      // debugForm.triggerEventHandler('submit');
+
+      // 2nd way
+      // const form = debugForm.nativeElement as HTMLFormElement;
+      // form.dispatchEvent(new Event('submit'));
+
+      // 3rd way
+      triggerClickElement(fixture, 'btn-submit', true);
+
+      fixture.detectChanges();
+
+      usersServiceSpy.create.and.returnValue(asyncData(mockData));
+
+      expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
     });
-
-    const mockUser = generateOneUser();
-
-    usersServiceSpy.create.and.returnValue(asyncData(mockUser));
-
-    registerComponent.register();
-
-    expect(registerComponent.status).toBe('loading');
-
-    tick(); // this function finish all the async operations
-
-    expect(registerComponent.status).toBe('success');
-  }));
+  });
 });

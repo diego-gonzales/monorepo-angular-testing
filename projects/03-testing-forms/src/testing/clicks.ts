@@ -1,6 +1,7 @@
 import { ComponentFixture } from '@angular/core/testing';
 import { queryElement, queryElementByTestId } from './finders';
 
+// trigger event (click) on an element
 export function triggerClickEvent<T>(
   fixture: ComponentFixture<T>,
   selector: string,
@@ -18,6 +19,7 @@ export function triggerClickEvent<T>(
   debugElement.triggerEventHandler('click', event);
 }
 
+// trigger click on an element
 export function triggerClickElement<T>(
   fixture: ComponentFixture<T>,
   selector: string,
