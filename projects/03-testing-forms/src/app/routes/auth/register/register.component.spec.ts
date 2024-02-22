@@ -17,10 +17,9 @@ import {
   triggerClickElement,
   asyncError,
 } from '../../../../testing';
-import { User } from '@models/user.interface';
 import { generateOneUser } from '@mocks/user.mock';
 
-fdescribe('RegisterComponent', () => {
+describe('RegisterComponent', () => {
   let registerComponent: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;

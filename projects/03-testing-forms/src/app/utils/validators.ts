@@ -16,6 +16,10 @@ export const matchPasswords: ValidatorFn = (form: AbstractControl) => {
   const password = form.get('password')?.value;
   const confirmPassword = form.get('confirmPassword')?.value;
 
+  if (!password || !confirmPassword) {
+    throw new Error('Password or confirmPassword is not defined');
+  }
+
   return password !== confirmPassword ? { match_password: true } : null;
 };
 
