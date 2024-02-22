@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
 import RegisterComponent from './register.component';
 import { UsersService } from '@services/users.service';
@@ -7,6 +12,7 @@ import {
   queryElement,
   fillInput,
   observableMock,
+  asyncData,
 } from '../../../../testing';
 import { User } from '@models/user.interface';
 import { generateOneUser } from '@mocks/user.mock';
@@ -150,4 +156,26 @@ fdescribe('RegisterComponent', () => {
     expect(usersServiceSpy.create).toHaveBeenCalled();
     expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
   });
+
+  it('should change the "status" variable from "loading" to "success"', fakeAsync(() => {
+    registerComponent.form.patchValue({
+      name: 'test',
+      email: 'test@email.com',
+      password: '123456',
+      confirmPassword: '123456',
+      checkTerms: true,
+    });
+
+    const mockUser = generateOneUser();
+
+    usersServiceSpy.create.and.returnValue(asyncData(mockUser));
+
+    registerComponent.register();
+
+    expect(registerComponent.status).toBe('loading');
+
+    tick(); // this function finish all the async operations
+
+    expect(registerComponent.status).toBe('success');
+  }));
 });

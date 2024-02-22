@@ -32,6 +32,8 @@ export default class RegisterComponent {
     },
   );
 
+  status: 'init' | 'loading' | 'success' | 'error' = 'init';
+
   constructor(
     private _formBuilder: NonNullableFormBuilder,
     private _usersService: UsersService,
@@ -45,7 +47,10 @@ export default class RegisterComponent {
       return;
     }
 
+    this.status = 'loading';
+
     this._usersService.create(this.form.value).subscribe((rta) => {
+      this.status = 'success';
       console.log(rta);
     });
   }
