@@ -6,7 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { UsersService } from '@services/users.service';
-import { matchPasswords, validPassword } from '../../../utils/validators';
+import {
+  matchPasswords,
+  validPassword,
+  validateEmailAsync,
+} from '../../../utils/validators';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +23,11 @@ export default class RegisterComponent {
   form = this._formBuilder.group(
     {
       name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        [validateEmailAsync(this._usersService)],
+      ],
       password: [
         '',
         [Validators.required, Validators.minLength(6), validPassword],

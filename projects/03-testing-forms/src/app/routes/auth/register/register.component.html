@@ -44,6 +44,11 @@
               data-testid="email-invalid-error"
               >*It's not a email</small
             >
+            <small
+              *ngIf="emailField?.hasError('email_taken')"
+              data-testid="email-taken-error"
+              >*Email has already been taken</small
+            >
           </ng-container>
         </label>
       </div>

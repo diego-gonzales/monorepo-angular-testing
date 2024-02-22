@@ -1,5 +1,11 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { matchPasswords, validPassword } from './validators';
+import {
+  matchPasswords,
+  validPassword,
+  validateEmailAsync,
+} from './validators';
+import { UsersService } from '@services/users.service';
+import { observableMock } from '../../testing';
 
 fdescribe('Test Validators', () => {
   describe('Test for "validPassword"', () => {
@@ -54,6 +60,48 @@ fdescribe('Test Validators', () => {
       const fn = () => matchPasswords(formGroup);
 
       expect(fn).toThrowError(errorMsg);
+    });
+  });
+
+  describe('Test for "validateEmailAsync"', () => {
+    it('the email should be available', (doneFn: DoneFn) => {
+      const usersService: jasmine.SpyObj<UsersService> = jasmine.createSpyObj(
+        'UsersService',
+        ['isAvailableByEmail'],
+      );
+
+      const control = new FormControl('abcd@email.com');
+
+      usersService.isAvailableByEmail.and.returnValue(
+        observableMock({ isAvailable: true }),
+      );
+
+      const result = validateEmailAsync(usersService)(control);
+
+      result.subscribe((value) => {
+        expect(value).toBeNull();
+        doneFn();
+      });
+    });
+
+    it('the email should not be available', (doneFn: DoneFn) => {
+      const usersService: jasmine.SpyObj<UsersService> = jasmine.createSpyObj(
+        'UsersService',
+        ['isAvailableByEmail'],
+      );
+
+      const control = new FormControl('repetead@email.com');
+
+      usersService.isAvailableByEmail.and.returnValue(
+        observableMock({ isAvailable: false }),
+      );
+
+      const result = validateEmailAsync(usersService)(control);
+
+      result.subscribe((value) => {
+        expect(value).not.toBeNull();
+        doneFn();
+      });
     });
   });
 });
