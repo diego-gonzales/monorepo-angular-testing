@@ -7,7 +7,7 @@ import {
 import { UsersService } from '@services/users.service';
 import { observableMock } from '../../testing';
 
-fdescribe('Test Validators', () => {
+describe('Test Validators', () => {
   describe('Test for "validPassword"', () => {
     it('the password value should be valid', () => {
       const control = new FormControl('123456');

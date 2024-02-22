@@ -19,13 +19,16 @@ import {
 } from '../../../../testing';
 import { generateOneUser } from '@mocks/user.mock';
 
-describe('RegisterComponent', () => {
+fdescribe('RegisterComponent', () => {
   let registerComponent: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let usersServiceSpy: jasmine.SpyObj<UsersService>;
 
   beforeEach(async () => {
-    const spy = jasmine.createSpyObj('UsersService', ['create']);
+    const spy = jasmine.createSpyObj('UsersService', [
+      'create',
+      'isAvailableByEmail',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [RegisterComponent],
@@ -39,6 +42,13 @@ describe('RegisterComponent', () => {
     ) as jasmine.SpyObj<UsersService>;
 
     fixture.detectChanges();
+  });
+
+  beforeEach(() => {
+    // We need this because internally the control 'email' is using the method 'isAvailableByEmail' from the service, in the custom async validator (validateEmailAsync)
+    usersServiceSpy.isAvailableByEmail.and.returnValue(
+      observableMock({ isAvailable: true }),
+    );
   });
 
   it('should create', () => {
@@ -112,6 +122,25 @@ describe('RegisterComponent', () => {
       );
 
       expect(emailErrorTextContent).toContain("It's not a email");
+    });
+
+    it('email should already be taken', () => {
+      // this code should be here because we need to change the return value of the spy before the user types the email
+      usersServiceSpy.isAvailableByEmail.and.returnValue(
+        observableMock({ isAvailable: false }),
+      );
+
+      fillInput(fixture, 'input#email', 'taken@email.com');
+
+      fixture.detectChanges();
+
+      const emailErrorTextContent = getTextContent(
+        fixture,
+        'email-taken-error',
+      );
+
+      expect(emailErrorTextContent).toContain('Email has already been taken');
+      expect(usersServiceSpy.isAvailableByEmail).toHaveBeenCalledTimes(1);
     });
 
     it('password field should be invalid', () => {
