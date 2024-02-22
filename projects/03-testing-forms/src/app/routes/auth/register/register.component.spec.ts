@@ -15,6 +15,7 @@ import {
   asyncData,
   checkInput,
   triggerClickElement,
+  asyncError,
 } from '../../../../testing';
 import { User } from '@models/user.interface';
 import { generateOneUser } from '@mocks/user.mock';
@@ -184,7 +185,7 @@ fdescribe('RegisterComponent', () => {
   });
 
   describe('Test submit entire form from UI', () => {
-    it('the form submit should call the service and change the "status" variable from "loading" to "success"', () => {
+    it('the form submit should call the service and change the "status" variable from "loading" to "success"', fakeAsync(() => {
       const mockData = generateOneUser();
 
       fillInput(fixture, 'input#name', 'test');
@@ -194,6 +195,8 @@ fdescribe('RegisterComponent', () => {
       checkInput(fixture, 'input#terms', true);
 
       const debugForm = queryElement(fixture, 'form');
+
+      usersServiceSpy.create.and.returnValue(asyncData(mockData));
 
       // 1st way
       // debugForm.triggerEventHandler('submit');
@@ -205,11 +208,33 @@ fdescribe('RegisterComponent', () => {
       // 3rd way
       triggerClickElement(fixture, 'btn-submit', true);
 
-      fixture.detectChanges();
+      expect(registerComponent.status).toBe('loading');
 
-      usersServiceSpy.create.and.returnValue(asyncData(mockData));
+      tick();
 
       expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
-    });
+      expect(registerComponent.status).toBe('success');
+    }));
+
+    it('should change "status" variable from "loading" to "error"', fakeAsync(() => {
+      fillInput(fixture, 'input#name', 'test');
+      fillInput(fixture, 'input#email', 'test@email.com');
+      fillInput(fixture, 'input#password', '123456');
+      fillInput(fixture, 'input#confirmPassword', '123456');
+      checkInput(fixture, 'input#terms', true);
+
+      const debugForm = queryElement(fixture, 'form');
+
+      usersServiceSpy.create.and.returnValue(asyncError('Errorcito'));
+
+      triggerClickElement(fixture, 'btn-submit', true);
+
+      expect(registerComponent.status).toBe('loading');
+
+      tick();
+
+      expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
+      expect(registerComponent.status).toBe('error');
+    }));
   });
 });

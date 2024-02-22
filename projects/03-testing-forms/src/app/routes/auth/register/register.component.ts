@@ -49,9 +49,15 @@ export default class RegisterComponent {
 
     this.status = 'loading';
 
-    this._usersService.create(this.form.value).subscribe((rta) => {
-      this.status = 'success';
-      console.log(rta);
+    this._usersService.create(this.form.value).subscribe({
+      next: (rta) => {
+        this.status = 'success';
+        console.log(rta);
+      },
+      error: (err) => {
+        this.status = 'error';
+        console.log(err);
+      },
     });
   }
 
