@@ -4,7 +4,7 @@ import { User } from '@models/user.interface';
 export const generateOneUser = () => {
   const user: User = {
     id: faker.string.uuid(),
-    name: faker.name.firstName(),
+    name: faker.person.firstName(),
     emaiil: faker.internet.email(),
     password: faker.internet.password(),
     role: 'admin',

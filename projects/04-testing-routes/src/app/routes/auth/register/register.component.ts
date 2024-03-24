@@ -11,6 +11,7 @@ import {
   validPassword,
   validateEmailAsync,
 } from '../../../utils/validators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -45,6 +46,7 @@ export default class RegisterComponent {
   constructor(
     private _formBuilder: NonNullableFormBuilder,
     private _usersService: UsersService,
+    private _router: Router,
   ) {}
 
   ngOnInit(): void {}
@@ -60,11 +62,13 @@ export default class RegisterComponent {
     this._usersService.create(this.form.value).subscribe({
       next: (rta) => {
         this.status = 'success';
-        console.log(rta);
+        this._router.navigateByUrl('/auth/login');
+        // console.log(rta);
       },
       error: (err) => {
         this.status = 'error';
-        console.log(err);
+        // this._router.navigateByUrl('/login')
+        // console.log(err);
       },
     });
   }
