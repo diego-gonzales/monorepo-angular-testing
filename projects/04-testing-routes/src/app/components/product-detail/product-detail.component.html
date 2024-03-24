@@ -4,12 +4,12 @@
   @if (product) {
     <article class="detail">
       <figure>
-        <img [src]="product.images[0]" alt="" />
+        <img data-testid="product-image" [src]="product.images[0]" alt="" />
       </figure>
       <div>
-        <h1>{{ product.title }}</h1>
-        <h2>{{ product.price | currency }}</h2>
-        <p>{{ product.description }}</p>
+        <h1 data-testid="product-title">{{ product.title }}</h1>
+        <h2 data-testid="product-price">{{ product.price | currency }}</h2>
+        <p data-testid="product-description">{{ product.description }}</p>
       </div>
     </article>
   }
