@@ -1,0 +1,36 @@
+<section>
+  <h2>Products List</h2>
+  <ul class="grid">
+    @for (product of products(); track product.id) {
+      <li>
+        <app-product [product]="product" />
+      </li>
+    } @empty {
+      <li>
+        <p>No products found</p>
+      </li>
+    }
+  </ul>
+
+  <button
+    data-testid="btn-more"
+    (click)="getAllProducts()"
+    [disabled]="status === 'loading'"
+  >
+    @if (status === "init" || status === "success") {
+      <span>Load more</span>
+    } @else if (status === "loading") {
+      <span>Loading...</span>
+    } @else if (status === "error") {
+      <span>Ups, error!</span>
+    }
+  </button>
+</section>
+
+<section>
+  <h2>Response from promise</h2>
+  <button data-testid="btn-promise" (click)="callPromise()">
+    Call promise
+  </button>
+  <p data-testid="promise-response">{{ response }}</p>
+</section>

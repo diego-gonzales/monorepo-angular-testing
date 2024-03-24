@@ -1,0 +1,13 @@
+<section>
+  <h3 data-testid="greetings">¡Hello {{ person.name }}!</h3>
+  <p data-testid="info">My height is {{ person.height }}</p>
+</section>
+
+<section>
+  <button data-testid="btn-imc" (click)="calculateIMC()">Calculate IMC</button>
+  <h5 data-testid="imc-info">IMC: {{ imc }}</h5>
+</section>
+
+<section>
+  <button data-testid="btn-emit" (click)="emitPerson()">Emit person</button>
+</section>
