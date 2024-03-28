@@ -14,6 +14,7 @@ import { ProductsService } from '@services/products.service';
 export default class ProductDetailComponent {
   productId: string | null = null;
   product: Product | null = null;
+  isLoading: boolean = false;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -33,12 +34,17 @@ export default class ProductDetailComponent {
   }
 
   private getProduct(productId: string) {
+    this.isLoading = true;
+
     this._productsService.getOne(productId).subscribe({
       next: (data) => {
         this.product = data;
       },
       error: () => {
         this.goToBack();
+      },
+      complete: () => {
+        this.isLoading = false;
       },
     });
   }

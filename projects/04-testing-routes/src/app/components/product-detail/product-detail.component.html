@@ -1,7 +1,7 @@
 <section class="container">
   <a (click)="goToBack()">Back</a>
 
-  @if (product) {
+  @if (product && !isLoading) {
     <article class="detail">
       <figure>
         <img data-testid="product-image" [src]="product.images[0]" alt="" />
@@ -12,5 +12,9 @@
         <p data-testid="product-description">{{ product.description }}</p>
       </div>
     </article>
+  }
+
+  @if (isLoading) {
+    <div data-testid="loader">Loading product...</div>
   }
 </section>

@@ -1,9 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
 import ProductDetailComponent from './product-detail.component';
 import { ActivatedRoute } from '@angular/router';
 import {
   ActivatedRouteStub,
+  asyncData,
   getTextContent,
   observableMock,
   queryElementByTestId,
@@ -62,7 +68,7 @@ fdescribe('@ProductDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#should render the product', () => {
+  it('#should render the product when there is an id param', () => {
     const productId = '2';
     const productMock = {
       ...generateOneProduct(),
@@ -89,4 +95,56 @@ fdescribe('@ProductDetailComponent', () => {
 
     expect(productServiceSpy.getOne).toHaveBeenCalledOnceWith(productId);
   });
+
+  it('should go back to the previous page when there is no an id param', () => {
+    activatedRouteStub.setParamMap({});
+    locationSpy.back.and.callThrough();
+
+    fixture.detectChanges();
+
+    expect(locationSpy.back).toHaveBeenCalled();
+  });
+
+  it('should change "isLoading" variable to "true"', fakeAsync(() => {
+    const productId = '10';
+    const productMock = {
+      ...generateOneProduct(),
+      id: productId,
+    };
+
+    activatedRouteStub.setParamMap({ id: productId });
+    productServiceSpy.getOne.and.returnValue(asyncData(productMock));
+
+    fixture.detectChanges();
+
+    expect(component.isLoading).toBeTruthy();
+
+    tick();
+
+    expect(component.isLoading).toBeFalsy();
+  }));
+
+  it('should show a loader before get the product', fakeAsync(() => {
+    const productId = '10';
+    const productMock = {
+      ...generateOneProduct(),
+      id: productId,
+    };
+
+    activatedRouteStub.setParamMap({ id: productId });
+    productServiceSpy.getOne.and.returnValue(asyncData(productMock));
+
+    fixture.detectChanges();
+
+    const loaderElementBefore = queryElementByTestId(fixture, 'loader');
+
+    expect(loaderElementBefore).toBeDefined();
+
+    tick();
+
+    fixture.detectChanges();
+
+    const loaderElementAfter = queryElementByTestId(fixture, 'loader');
+    expect(loaderElementAfter).toBeNull();
+  }));
 });
