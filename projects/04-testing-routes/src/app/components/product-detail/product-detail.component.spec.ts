@@ -147,4 +147,23 @@ fdescribe('@ProductDetailComponent', () => {
     const loaderElementAfter = queryElementByTestId(fixture, 'loader');
     expect(loaderElementAfter).toBeNull();
   }));
+
+  describe('When the type query param is sent', () => {
+    it('#should be "customer"', () => {
+      const productId = '11';
+      const productMock = {
+        ...generateOneProduct(),
+        id: productId,
+      };
+      const typeQueryParamValue = 'customer';
+
+      activatedRouteStub.setParamMap({ id: productId });
+      activatedRouteStub.setQueryParamMap({ type: typeQueryParamValue });
+      productServiceSpy.getOne.and.returnValue(observableMock(productMock));
+
+      fixture.detectChanges();
+
+      expect(component.typeQueryParam).toBe(typeQueryParamValue);
+    });
+  });
 });

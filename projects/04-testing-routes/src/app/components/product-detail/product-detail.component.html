@@ -1,6 +1,8 @@
 <section class="container">
   <a (click)="goToBack()">Back</a>
 
+  <h3>Type query param: {{ typeQueryParam }}</h3>
+
   @if (product && !isLoading) {
     <article class="detail">
       <figure>

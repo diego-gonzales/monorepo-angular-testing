@@ -15,6 +15,7 @@ export default class ProductDetailComponent {
   productId: string | null = null;
   product: Product | null = null;
   isLoading: boolean = false;
+  typeQueryParam: string | null = null;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -30,6 +31,10 @@ export default class ProductDetailComponent {
       } else {
         this.goToBack();
       }
+    });
+
+    this._activatedRoute.queryParamMap.subscribe((queryParams) => {
+      this.typeQueryParam = queryParams.get('type');
     });
   }
 
