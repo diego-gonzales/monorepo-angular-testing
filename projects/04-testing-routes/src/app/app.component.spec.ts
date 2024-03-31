@@ -6,6 +6,21 @@ import {
   queryAllElementsByDirective,
 } from '../testing';
 import { RouterLink } from '@angular/router';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+
+@Component({
+  standalone: true,
+  selector: 'app-header',
+  template: '',
+})
+class HeaderComponentStub {}
+
+@Component({
+  standalone: true,
+  selector: 'app-footer',
+  template: '',
+})
+class FooterComponentStub {}
 
 fdescribe('@AppComponent', () => {
   let appComponent: AppComponent;
@@ -13,14 +28,22 @@ fdescribe('@AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, RouterTestingModule],
+      imports: [
+        AppComponent,
+        RouterTestingModule,
+        HeaderComponentStub,
+        FooterComponentStub,
+      ],
       // declarations: [RouterLinkDirectiveStub],
+      // schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     appComponent = fixture.componentInstance;
 
     fixture.detectChanges();
+
+    console.log(fixture.nativeElement);
   });
 
   it('#should create the app', () => {
