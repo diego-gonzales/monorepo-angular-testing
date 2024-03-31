@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import {
-  RouterLinkDirectiveStub,
+  // RouterLinkDirectiveStub,
   queryAllElementsByDirective,
 } from '../testing';
 import { RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ fdescribe('@AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent, RouterTestingModule],
-      declarations: [RouterLinkDirectiveStub],
+      // declarations: [RouterLinkDirectiveStub],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -28,28 +28,48 @@ fdescribe('@AppComponent', () => {
   });
 
   it('#should show 3 elements with the "routerLink" directive', () => {
-    const elements = queryAllElementsByDirective(
-      fixture,
-      RouterLinkDirectiveStub,
-    );
+    const elements = queryAllElementsByDirective(fixture, RouterLink);
 
     expect(elements.length).toBe(3);
   });
 
   it('#should match routerLinks with routes', () => {
-    const elements = queryAllElementsByDirective(
-      fixture,
-      RouterLinkDirectiveStub,
-    );
+    const elements = queryAllElementsByDirective(fixture, RouterLink);
 
     const routerLinks = elements.map((element) =>
-      element.injector.get(RouterLinkDirectiveStub),
+      element.injector.get(RouterLink),
     );
 
-    expect(routerLinks[0].linkParams).toEqual('/products');
-    expect(routerLinks[1].linkParams).toEqual('/auth/login');
-    expect(routerLinks[2].linkParams).toEqual('/auth/register');
+    expect(routerLinks[0].href).toEqual('/products');
+    expect(routerLinks[1].href).toEqual('/auth/login');
+    expect(routerLinks[2].href).toEqual('/auth/register');
   });
 });
 
-// NO ESTÁ FUNCIONANDO OBTENER REFERENCIA DE LOS ELEMENTOS CON BY.DIRECTIVE
+// NO ESTÁ FUNCIONANDO OBTENER REFERENCIA DE LOS ELEMENTOS CON BY.DIRECTIVE DE ROUTERLINKDIRECTIVESTUB, PERO SÍ CON ROUTERLINK
+
+/*
+it('#should show 3 elements with the "routerLink" directive', () => {
+  const elements = queryAllElementsByDirective(
+    fixture,
+    RouterLinkDirectiveStub,
+  );
+
+  expect(elements.length).toBe(3);
+});
+
+it('#should match routerLinks with routes', () => {
+  const elements = queryAllElementsByDirective(
+    fixture,
+    RouterLinkDirectiveStub,
+  );
+
+  const routerLinks = elements.map((element) =>
+    element.injector.get(RouterLinkDirectiveStub),
+  );
+
+  expect(routerLinks[0].linkParams).toEqual('/products');
+  expect(routerLinks[1].linkParams).toEqual('/auth/login');
+  expect(routerLinks[2].linkParams).toEqual('/auth/register');
+});
+*/
