@@ -18,7 +18,7 @@ import { ProductsService } from '@services/products.service';
 import { Location } from '@angular/common';
 import { generateOneProduct } from '@mocks/product.mock';
 
-fdescribe('@ProductDetailComponent', () => {
+describe('@ProductDetailComponent', () => {
   let component: ProductDetailComponent;
   let fixture: ComponentFixture<ProductDetailComponent>;
   let activatedRouteStub: ActivatedRouteStub;

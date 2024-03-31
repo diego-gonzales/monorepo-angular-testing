@@ -82,26 +82,5 @@ describe('@RegisterComponent', () => {
 
       expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('/auth/login');
     }));
-
-    // it('should change "status" variable from "loading" to "error"', fakeAsync(() => {
-    //   fillInput(fixture, 'input#name', 'test');
-    //   fillInput(fixture, 'input#email', 'test@email.com');
-    //   fillInput(fixture, 'input#password', '123456');
-    //   fillInput(fixture, 'input#confirmPassword', '123456');
-    //   checkInput(fixture, 'input#terms', true);
-
-    //   const debugForm = queryElement(fixture, 'form');
-
-    //   usersServiceSpy.create.and.returnValue(asyncError('Errorcito'));
-
-    //   triggerClickElement(fixture, 'btn-submit', true);
-
-    //   expect(registerComponent.status).toBe('loading');
-
-    //   tick();
-
-    //   expect(usersServiceSpy.create).toHaveBeenCalledTimes(1);
-    //   expect(registerComponent.status).toBe('error');
-    // }));
   });
 });

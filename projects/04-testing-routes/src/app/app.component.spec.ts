@@ -1,29 +1,55 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import {
+  RouterLinkDirectiveStub,
+  queryAllElementsByDirective,
+} from '../testing';
+import { RouterLink } from '@angular/router';
 
-describe('AppComponent', () => {
+fdescribe('@AppComponent', () => {
+  let appComponent: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, RouterTestingModule],
+      declarations: [RouterLinkDirectiveStub],
     }).compileComponents();
-  });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+    fixture = TestBed.createComponent(AppComponent);
+    appComponent = fixture.componentInstance;
 
-  it(`should have the '04-testing-routes' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('04-testing-routes');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, 04-testing-routes');
+  });
+
+  it('#should create the app', () => {
+    expect(appComponent).toBeTruthy();
+  });
+
+  it('#should show 3 elements with the "routerLink" directive', () => {
+    const elements = queryAllElementsByDirective(
+      fixture,
+      RouterLinkDirectiveStub,
+    );
+
+    expect(elements.length).toBe(3);
+  });
+
+  it('#should match routerLinks with routes', () => {
+    const elements = queryAllElementsByDirective(
+      fixture,
+      RouterLinkDirectiveStub,
+    );
+
+    const routerLinks = elements.map((element) =>
+      element.injector.get(RouterLinkDirectiveStub),
+    );
+
+    expect(routerLinks[0].linkParams).toEqual('/products');
+    expect(routerLinks[1].linkParams).toEqual('/auth/login');
+    expect(routerLinks[2].linkParams).toEqual('/auth/register');
   });
 });
+
+// NO ESTÁ FUNCIONANDO OBTENER REFERENCIA DE LOS ELEMENTOS CON BY.DIRECTIVE
