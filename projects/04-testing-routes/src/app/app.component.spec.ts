@@ -22,7 +22,7 @@ class HeaderComponentStub {}
 })
 class FooterComponentStub {}
 
-fdescribe('@AppComponent', () => {
+describe('@AppComponent', () => {
   let appComponent: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
 

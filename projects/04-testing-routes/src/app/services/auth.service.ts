@@ -5,6 +5,7 @@ import { TokenService } from './token.service';
 import { Auth } from '@models/auth.interface';
 import { switchMap, tap } from 'rxjs/operators';
 import { User } from '@models/user.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,10 @@ export class AuthService {
     private _httpClient: HttpClient,
     private _tokenService: TokenService,
   ) {}
+
+  getUser() {
+    return this._getProfile();
+  }
 
   login(email: string, password: string) {
     return this._httpClient
@@ -31,7 +36,7 @@ export class AuthService {
     );
   }
 
-  private _getProfile() {
+  private _getProfile(): Observable<User | null> {
     return this._httpClient.get<User>(`${this._apiUrl}/auth/profile`);
   }
 }
