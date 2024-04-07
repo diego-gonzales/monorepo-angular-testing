@@ -7,6 +7,7 @@ import { generateOneUser } from '@mocks/user.mock';
 import { observableMock } from '../../testing';
 import {
   fakeActivatedRouteSnapshot,
+  fakeParamMap,
   fakeRouterStateSnapshot,
 } from '../../testing/guard-params-mocks';
 import { Observable } from 'rxjs';
@@ -44,6 +45,8 @@ fdescribe('@authGuard', () => {
       params: { productId: '123' },
       data: { myData: 'myData' },
       queryParams: { myQueryParams: 'myQueryParams' },
+      paramMap: fakeParamMap({ productId: '123' }),
+      queryParamMap: fakeParamMap({ myQueryParams: 'myQueryParams' }),
     });
     const routerStateSnapshotMock = fakeRouterStateSnapshot({});
 
@@ -65,6 +68,8 @@ fdescribe('@authGuard', () => {
       params: { productId: '123' },
       data: { myData: 'myData' },
       queryParams: { myQueryParams: 'myQueryParams' },
+      paramMap: fakeParamMap({ productId: '123' }),
+      queryParamMap: fakeParamMap({ myQueryParams: 'myQueryParams' }),
     });
     const routerStateSnapshotMock = fakeRouterStateSnapshot({});
 

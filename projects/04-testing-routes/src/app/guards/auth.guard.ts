@@ -11,6 +11,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   const testingParams = route.params['productId'];
   const testingData = route.data['myData'];
   const testingQueryParams = route.queryParams['myQueryParams'];
+  const testingParamMap = route.paramMap.get('productId');
+  const testingQueryParamsMap = route.queryParamMap.get('myQueryParams');
 
   return _authService.getUser().pipe(
     map((user) => {
