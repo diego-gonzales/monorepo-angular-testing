@@ -40,14 +40,18 @@ fdescribe('@authGuard', () => {
 
   it('should return true if user is logged in', (done) => {
     const mockUser = generateOneUser();
-    const activatedRouteMock = fakeActivatedRouteSnapshot({});
-    const routerStateMock = fakeRouterStateSnapshot({});
+    const activatedRouteSnapshotMock = fakeActivatedRouteSnapshot({
+      params: { productId: '123' },
+      data: { myData: 'myData' },
+      queryParams: { myQueryParams: 'myQueryParams' },
+    });
+    const routerStateSnapshotMock = fakeRouterStateSnapshot({});
 
     authServiceSpy.getUser.and.returnValue(observableMock(mockUser));
 
     const guardResult = executeGuard(
-      activatedRouteMock,
-      routerStateMock,
+      activatedRouteSnapshotMock,
+      routerStateSnapshotMock,
     ) as Observable<boolean>;
 
     guardResult.subscribe((result) => {
@@ -57,14 +61,18 @@ fdescribe('@authGuard', () => {
   });
 
   it('should return false if user is not logged in', (done) => {
-    const activatedRouteMock = fakeActivatedRouteSnapshot({});
-    const routerStateMock = fakeRouterStateSnapshot({});
+    const activatedRouteSnapshotMock = fakeActivatedRouteSnapshot({
+      params: { productId: '123' },
+      data: { myData: 'myData' },
+      queryParams: { myQueryParams: 'myQueryParams' },
+    });
+    const routerStateSnapshotMock = fakeRouterStateSnapshot({});
 
     authServiceSpy.getUser.and.returnValue(observableMock(null));
 
     const guardResult = executeGuard(
-      activatedRouteMock,
-      routerStateMock,
+      activatedRouteSnapshotMock,
+      routerStateSnapshotMock,
     ) as Observable<boolean>;
 
     guardResult.subscribe((result) => {
