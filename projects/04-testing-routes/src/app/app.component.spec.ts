@@ -5,7 +5,7 @@ import {
   // RouterLinkDirectiveStub,
   queryAllElementsByDirective,
 } from '../testing';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkWithHref } from '@angular/router';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -51,13 +51,13 @@ describe('@AppComponent', () => {
   });
 
   it('#should show 3 elements with the "routerLink" directive', () => {
-    const elements = queryAllElementsByDirective(fixture, RouterLink);
+    const elements = queryAllElementsByDirective(fixture, RouterLinkWithHref);
 
     expect(elements.length).toBe(3);
   });
 
   it('#should match routerLinks with routes', () => {
-    const elements = queryAllElementsByDirective(fixture, RouterLink);
+    const elements = queryAllElementsByDirective(fixture, RouterLinkWithHref);
 
     const routerLinks = elements.map((element) =>
       element.injector.get(RouterLink),

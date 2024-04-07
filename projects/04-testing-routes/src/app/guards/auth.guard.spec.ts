@@ -12,7 +12,7 @@ import {
 } from '../../testing/guard-params-mocks';
 import { Observable } from 'rxjs';
 
-fdescribe('@authGuard', () => {
+describe('@authGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
     TestBed.runInInjectionContext(() => authGuard(...guardParameters));
   let authServiceSpy: jasmine.SpyObj<AuthService>;
