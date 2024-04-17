@@ -50,10 +50,10 @@ describe('@AppComponent integration test with fake components and routes', () =>
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule.withRoutes(routes),
         AppComponent,
         ProductsComponent,
         ProductDetailComponent,
+        RouterTestingModule.withRoutes(routes),
       ],
       // schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
