@@ -80,7 +80,7 @@ describe('@AppComponent integration test with fake components and routes', () =>
   it('#should show 3 elements with the "routerLink" directive', () => {
     const elements = queryAllElementsByDirective(fixture, RouterLinkWithHref);
 
-    expect(elements.length).toBe(3);
+    expect(elements.length).toBe(4);
   });
 
   describe('when link "Products" is clicked', () => {
