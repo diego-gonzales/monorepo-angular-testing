@@ -134,7 +134,7 @@ fdescribe('@AppComponent integration test with real components and routes', () =
 
       fixture.detectChanges(); // ProductsComponent ngOnInit()
 
-      tick();
+      tick(); // to resolve async data
 
       fixture.detectChanges(); // Después del ngOnInit
 
