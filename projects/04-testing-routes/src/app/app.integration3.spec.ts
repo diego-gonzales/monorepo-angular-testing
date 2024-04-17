@@ -25,7 +25,7 @@ import { AuthService } from '@services/auth.service';
 import { generateOneUser } from '@mocks/user.mock';
 import LoginComponent from '@routes/auth/login/login.component';
 
-fdescribe('@AppComponent integration test with real components and routes', () => {
+describe('@AppComponent integration test with real components and routes', () => {
   let appComponent: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let router: Router;

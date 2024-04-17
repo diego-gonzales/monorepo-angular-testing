@@ -43,7 +43,7 @@ describe('@AppComponent', () => {
 
     fixture.detectChanges();
 
-    console.log(fixture.nativeElement);
+    // console.log(fixture.nativeElement);
   });
 
   it('#should create the app', () => {
